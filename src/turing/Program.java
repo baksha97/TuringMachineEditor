@@ -32,7 +32,7 @@ public class Program {
         Scanner prg = new Scanner(in);
         while(prg.hasNextLine()){
             String line = prg.nextLine();
-            if(line.contains("//")) continue;
+            if(line.contains("//") || line.equals("")) continue;
             lines.add(line);
         }
         prg.close();
