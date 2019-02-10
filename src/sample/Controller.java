@@ -10,9 +10,13 @@ import javafx.scene.text.TextFlow;
 import turing.Program;
 import turing.TuringMachine;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.ResourceBundle;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 
 public class Controller implements Initializable {
@@ -28,6 +32,7 @@ public class Controller implements Initializable {
     private TuringMachine tm;
 
     public void step(){
+        saveEditor();
         tm.changeProgram(new Program(programArea.getText().trim()));
         if(tm.hasNextQuadruple()){
             prevQuadLabel.setText(tm.nextQuadruple().toString());
@@ -38,7 +43,7 @@ public class Controller implements Initializable {
             currentNumsLabel.setText(tm.numbersOnTape().toString());
         }else{
             nextQuadLabel.setText("None Available");
-            stateLabel.setText("MACHINE HALTED...");
+            stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
         }
     }
 
@@ -55,6 +60,7 @@ public class Controller implements Initializable {
     }
 
     public void set(){
+        saveEditor();
         int[] numbers = Arrays.asList(inputField.getText().trim().split(","))
                 .stream()
                 .map(String::trim)
@@ -68,7 +74,25 @@ public class Controller implements Initializable {
         currentNumsLabel.setText(tm.numbersOnTape().toString());
     }
 
+
+    private void saveEditor(){
+        List<String> lines = new ArrayList<>();
+        Scanner prg = new Scanner(programArea.getText());
+        while(prg.hasNextLine()){
+            String line = prg.nextLine();
+            lines.add(line);
+        }
+
+        Path file = Paths.get("current-program.txt");
+        try {
+            Files.write(file, lines, Charset.forName("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void run(){
+        saveEditor();
         while(tm.hasNextQuadruple()){
             prevQuadLabel.setText(tm.nextQuadruple().toString());
             tm.executeNextQuadruple();
