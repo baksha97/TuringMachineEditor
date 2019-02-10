@@ -1,4 +1,4 @@
-package sample;
+package fx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
