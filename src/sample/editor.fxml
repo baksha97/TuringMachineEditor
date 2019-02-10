@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<VBox prefHeight="450.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <AnchorPane prefHeight="439.0" prefWidth="605.0">
+         <children>
+            <TextArea fx:id="programArea" layoutX="18.0" layoutY="48.0" prefHeight="391.0" prefWidth="234.0" />
+            <Label layoutX="14.0" layoutY="23.0" text="Test Program" />
+            <Label layoutX="257.0" layoutY="19.0" text="Starting Tape">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="256.0" layoutY="83.0" text="Next Quad:" />
+            <Label layoutX="257.0" layoutY="65.0" text="Prev Quad:" />
+            <Label fx:id="prevQuadLabel" layoutX="323.0" layoutY="65.0" text="(e)" />
+            <Label fx:id="nextQuadLabel" layoutX="323.0" layoutY="83.0" text="(e)" />
+            <Label layoutX="256.0" layoutY="48.0" text="State:" />
+            <Label fx:id="stateLabel" layoutX="323.0" layoutY="48.0" text="Label" />
+            <TextFlow fx:id="tapeFlow" layoutX="253.0" layoutY="112.0" prefHeight="68.0" prefWidth="358.0" />
+            <Button layoutX="557.0" layoutY="413.0" mnemonicParsing="false" onAction="#step" text="Step" />
+            <Button layoutX="260.0" layoutY="413.0" mnemonicParsing="false" onAction="#run" text="Run" />
+            <Button layoutX="315.0" layoutY="413.0" mnemonicParsing="false" onAction="#set" text="Setup/Reset" />
+            <Label layoutX="260.0" layoutY="194.0" text="Numbers:" />
+            <Label fx:id="currentNumsLabel" layoutX="324.0" layoutY="194.0" prefHeight="17.0" prefWidth="278.0" text="[empty]" />
+            <TextField fx:id="inputField" layoutX="85.0" layoutY="19.0" prefHeight="25.0" prefWidth="166.0" promptText="Input" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
