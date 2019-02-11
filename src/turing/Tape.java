@@ -76,6 +76,8 @@ public class Tape {
         pos--;
         if(pos < 0)
             cells.add(0, BLANK);
+            cells.add(0, BLANK);
+            pos++;
     }
 
     private void moveRight(){
