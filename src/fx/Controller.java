@@ -67,6 +67,7 @@ public class Controller implements Initializable {
         setExecutionArea();
         currentNumsLabel.setText(tm.numbersOnTape().toString());
         outputArea.setText("");
+        prevQuadLabel.setText("");
     }
 
 
