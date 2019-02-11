@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("editor.fxml"));
-        primaryStage.setTitle("Turing Machine Editor v2.11.2019.1539");
+        primaryStage.setTitle("Turing Machine Editor 2v2.11.2019.1900");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

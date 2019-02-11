@@ -74,10 +74,11 @@ public class Tape {
 
     private void moveLeft(){
         pos--;
-        if(pos < 0)
+        if(pos < 0) {
             cells.add(0, BLANK);
             cells.add(0, BLANK);
-            pos++;
+            pos += 2;
+        }
     }
 
     private void moveRight(){
@@ -126,17 +127,17 @@ public class Tape {
     //TODO: check this sometimes
     public List<Integer> currentNumbersOnTape(){
         ArrayList<Integer> res = new ArrayList<>();
-        int i = 1;
         int current = 0;
 
-        while(i<cells.size()){
-            if(cells.get(i-1) == FILL && cells.get(i) == BLANK){
+        for (int i = 0; i<cells.size() ; i++){
+            if(cells.get(i) == FILL){
+                current++;
+            }else if(i != 0 && cells.get(i) == BLANK && current != 0){
                 res.add(current);
                 current = 0;
-            } else if(cells.get(i) == FILL){
-                current++;
+            }else{
+                System.out.println("Not adding "+current +" from index:" + i);
             }
-            i++;
         }
 
         if(current != 0) res.add(current);

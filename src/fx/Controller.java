@@ -10,6 +10,7 @@ import javafx.scene.text.TextFlow;
 import turing.Program;
 import turing.TuringMachine;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -28,23 +29,15 @@ public class Controller implements Initializable {
     public Label nextQuadLabel;
     public Label currentNumsLabel;
     public TextFlow tapeFlow;
+    public Label countLabel;
+    public TextArea outputArea;
 
     private TuringMachine tm;
 
     public void step() {
         saveEditor();
         tm.changeProgram(new Program(programArea.getText().trim()));
-        if (tm.hasNextQuadruple()) {
-            prevQuadLabel.setText(tm.nextQuadruple().toString());
-            tm.executeNextQuadruple();
-            setExecutionArea();
-            nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
-            stateLabel.setText(tm.getTapeState().toString());
-            currentNumsLabel.setText(tm.numbersOnTape().toString());
-        } else {
-            nextQuadLabel.setText("None Available");
-            stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
-        }
+        stepAndUpdateUI();
     }
 
     private void setExecutionArea() {
@@ -57,6 +50,7 @@ public class Controller implements Initializable {
         Text sub = new Text(prevCurSub[2]);
         sub.setStyle("-fx-font: 16 arial;");
         tapeFlow.getChildren().addAll(prev, cur, sub);
+        countLabel.setText(String.valueOf(tm.getExecutionCount()));
     }
 
     public void set() {
@@ -72,6 +66,7 @@ public class Controller implements Initializable {
         nextQuadLabel.setText(tm.nextQuadruple().toString());
         setExecutionArea();
         currentNumsLabel.setText(tm.numbersOnTape().toString());
+        outputArea.setText("");
     }
 
 
@@ -94,17 +89,38 @@ public class Controller implements Initializable {
     public void run() {
         saveEditor();
         while (tm.hasNextQuadruple()) {
+            stepAndUpdateUI();
+        }
+    }
+
+    private void stepAndUpdateUI(){
+        if (tm.hasNextQuadruple()) {
             prevQuadLabel.setText(tm.nextQuadruple().toString());
+            outputArea.appendText(tm.nextQuadruple().toString() + "\n");
             tm.executeNextQuadruple();
             setExecutionArea();
             nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
             stateLabel.setText(tm.getTapeState().toString());
             currentNumsLabel.setText(tm.numbersOnTape().toString());
+        } else {
+            nextQuadLabel.setText("None Available");
+            stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
+        }
+    }
+
+    private void load_cur(){
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("current-program.txt"));
+            for(String line: lines){
+                programArea.appendText(line + "\n");
+            }
+        } catch (IOException e) {
+//            outputArea.setText("No current program found.");
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        load_cur();
     }
 }

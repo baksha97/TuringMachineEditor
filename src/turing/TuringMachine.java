@@ -8,9 +8,12 @@ public class TuringMachine {
     private Program program;
     private Tape tape;
 
+    private int executionCount;
+
     public TuringMachine(Program program, int... inputs){
         this.program = program;
         this.tape = new Tape(inputs);
+        this.executionCount = 0;
     }
 
     public TuringMachine(Program program, String startTape){
@@ -39,6 +42,7 @@ public class TuringMachine {
     }
 
     public void executeNextQuadruple(){
+        executionCount++;
         tape.execute(nextQuadruple());
     }
 
@@ -50,5 +54,7 @@ public class TuringMachine {
         return tape.pointedAt(tape.getPos());
     }
 
-
+    public int getExecutionCount() {
+        return executionCount;
+    }
 }
