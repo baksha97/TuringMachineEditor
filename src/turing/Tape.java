@@ -1,8 +1,5 @@
 package turing;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Tape {
@@ -10,7 +7,6 @@ public class Tape {
     private static final char FILL = '1';
 
     private ArrayList<Character> cells;
-    private int[] inputs;
 
     private int pos;
     private State currentState;
@@ -26,7 +22,6 @@ public class Tape {
 
     public Tape(int... inputs){
         initialize();
-        this.inputs = inputs;
         for(int input: inputs){
             cells.addAll(intInputAsFill(input));
             cells.add(BLANK);
@@ -44,7 +39,6 @@ public class Tape {
             cells.add(cur);
         }
         cells.add(BLANK);
-        this.inputs = currentNumbersOnTape().stream().mapToInt(i->i).toArray();
     }
 
     private List<Character> intInputAsFill(int x){

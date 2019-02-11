@@ -31,23 +31,23 @@ public class Controller implements Initializable {
 
     private TuringMachine tm;
 
-    public void step(){
+    public void step() {
         saveEditor();
         tm.changeProgram(new Program(programArea.getText().trim()));
-        if(tm.hasNextQuadruple()){
+        if (tm.hasNextQuadruple()) {
             prevQuadLabel.setText(tm.nextQuadruple().toString());
             tm.executeNextQuadruple();
             setExecutionArea();
             nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
             stateLabel.setText(tm.getTapeState().toString());
             currentNumsLabel.setText(tm.numbersOnTape().toString());
-        }else{
+        } else {
             nextQuadLabel.setText("None Available");
             stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
         }
     }
 
-    private void setExecutionArea(){
+    private void setExecutionArea() {
         tapeFlow.getChildren().clear();
         String[] prevCurSub = tm.getTapeDisplay();
         Text prev = new Text(prevCurSub[0]);
@@ -59,7 +59,7 @@ public class Controller implements Initializable {
         tapeFlow.getChildren().addAll(prev, cur, sub);
     }
 
-    public void set(){
+    public void set() {
         saveEditor();
         int[] numbers = Arrays.asList(inputField.getText().trim().split(","))
                 .stream()
@@ -75,10 +75,10 @@ public class Controller implements Initializable {
     }
 
 
-    private void saveEditor(){
+    private void saveEditor() {
         List<String> lines = new ArrayList<>();
         Scanner prg = new Scanner(programArea.getText());
-        while(prg.hasNextLine()){
+        while (prg.hasNextLine()) {
             String line = prg.nextLine();
             lines.add(line);
         }
@@ -91,9 +91,9 @@ public class Controller implements Initializable {
         }
     }
 
-    public void run(){
+    public void run() {
         saveEditor();
-        while(tm.hasNextQuadruple()){
+        while (tm.hasNextQuadruple()) {
             prevQuadLabel.setText(tm.nextQuadruple().toString());
             tm.executeNextQuadruple();
             setExecutionArea();

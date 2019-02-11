@@ -7,18 +7,15 @@ import java.util.List;
 public class TuringMachine {
     private Program program;
     private Tape tape;
-    private String startingTape;
 
     public TuringMachine(Program program, int... inputs){
         this.program = program;
         this.tape = new Tape(inputs);
-        this.startingTape = tape.toString().replace("[", "").replace("]","").replace(",","");
     }
 
     public TuringMachine(Program program, String startTape){
         this.program = program;
         this.tape = new Tape(startTape);
-        this.startingTape = startTape;
     }
 
     public void changeProgram(Program p){
@@ -47,10 +44,6 @@ public class TuringMachine {
 
     public List<Integer> numbersOnTape(){
         return tape.currentNumbersOnTape();
-    }
-
-    public String getStartingTape(){
-        return startingTape;
     }
 
     public String[] getTapeDisplay(){
