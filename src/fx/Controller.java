@@ -102,7 +102,9 @@ public class Controller implements Initializable {
     private void stepAndUpdateUI(){
         if (tm.hasNextQuadruple()) {
             prevQuadLabel.setText(tm.nextQuadruple().toString());
-            outputArea.appendText(tm.nextQuadruple().toString() + "\n");
+            outputArea.appendText("Execution #"+ (tm.getExecutionCount() + 1) + " on:\n");
+            outputArea.appendText(tm.toString() + "\n");
+            outputArea.appendText(tm.nextQuadruple().toString() + "\n\n");
             tm.executeNextQuadruple();
             setExecutionArea();
             nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");

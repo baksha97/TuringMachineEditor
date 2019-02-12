@@ -1,6 +1,7 @@
 package turing;
 
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,5 +57,9 @@ public class TuringMachine {
 
     public int getExecutionCount() {
         return executionCount;
+    }
+
+    public String toString(){
+        return Arrays.asList(getTapeDisplay()).toString();
     }
 }

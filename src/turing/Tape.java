@@ -135,8 +135,6 @@ public class Tape {
             }else if(i != 0 && cells.get(i) == BLANK && current != 0){
                 res.add(current);
                 current = 0;
-            }else{
-                System.out.println("Not adding "+current +" from index:" + i);
             }
         }
 
