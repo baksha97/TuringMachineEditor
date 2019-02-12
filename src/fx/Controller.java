@@ -53,15 +53,20 @@ public class Controller implements Initializable {
         countLabel.setText(String.valueOf(tm.getExecutionCount()));
     }
 
+
     public void set() {
         saveEditor();
-        int[] numbers = Arrays.asList(inputField.getText().trim().split(","))
-                .stream()
-                .map(String::trim)
-                .mapToInt(Integer::parseInt).toArray();
         Program p = new Program(programArea.getText().trim());
-        tm = new TuringMachine(p, numbers);
-
+        try {
+            int[] numbers = Arrays.asList(inputField.getText().trim().split(","))
+                    .stream()
+                    .map(String::trim)
+                    .mapToInt(Integer::parseInt).toArray();
+            tm = new TuringMachine(p, numbers);
+        }catch (Exception e){
+            String in = inputField.getText().trim();
+            tm = new TuringMachine(p, in);
+        }
         stateLabel.setText(tm.getTapeState().toString());
         nextQuadLabel.setText(tm.nextQuadruple().toString());
         setExecutionArea();
