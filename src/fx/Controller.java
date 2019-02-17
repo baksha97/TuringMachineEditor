@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import turing.Program;
 import turing.TuringMachine;
 
@@ -31,13 +32,21 @@ public class Controller implements Initializable {
     public TextFlow tapeFlow;
     public Label countLabel;
     public TextArea outputArea;
+    public TextField stepByField;
 
     private TuringMachine tm;
 
     public void step() {
         saveEditor();
         tm.changeProgram(new Program(programArea.getText().trim()));
-        stepAndUpdateUI();
+        try{
+            int steps = Integer.valueOf(stepByField.getText().trim());
+            for(int i=0; i<steps; i++){
+                stepAndUpdateUI();
+            }
+        }catch (Exception e){
+            outputArea.appendText("Invalid step count input.\n");
+        }
     }
 
     private void setExecutionArea() {
@@ -99,6 +108,16 @@ public class Controller implements Initializable {
         }
     }
 
+    public void onOpenClicked(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open .txt File");
+        fileChooser.setInitialDirectory(Paths.get(".").toFile());
+        File picked = fileChooser.showOpenDialog(null);
+        if(picked == null) return;
+        System.out.println(picked.getAbsolutePath());
+        load_file(picked.getAbsolutePath());
+    }
+
     private void stepAndUpdateUI(){
         if (tm.hasNextQuadruple()) {
             prevQuadLabel.setText(tm.nextQuadruple().toString());
@@ -116,19 +135,20 @@ public class Controller implements Initializable {
         }
     }
 
-    private void load_cur(){
+    private void load_file(String fileLocation){
+        programArea.setText("");
         try {
-            List<String> lines = Files.readAllLines(Paths.get("current-program.txt"));
+            List<String> lines = Files.readAllLines(Paths.get(fileLocation));
             for(String line: lines){
                 programArea.appendText(line + "\n");
             }
         } catch (IOException e) {
-//            outputArea.setText("No current program found.");
+            outputArea.setText("No current program found.");
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        load_cur();
+        load_file("current-program.txt");
     }
 }
