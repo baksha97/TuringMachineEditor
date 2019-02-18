@@ -5,7 +5,7 @@ public class Quadruple {
     public enum Command{
         LEFT, RIGHT, FILL, BLANK;
 
-        public static Command fromString(String s){
+        static Command fromString(String s){
             switch (s){
                 case "L": return LEFT;
                 case "R": return RIGHT;
@@ -16,13 +16,13 @@ public class Quadruple {
         }
     }
 
-    private String start;
-    private char conditional;
+    private final String start;
+    private final char conditional;
 
-    private Command command;
-    private String end;
+    private final Command command;
+    private final String end;
 
-    private State startingState;
+    private final State startingState;
 
     public Quadruple(String line){
         String[] partition = line.split(",", 4); //ex: q1,B,R,q2

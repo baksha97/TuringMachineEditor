@@ -1,8 +1,8 @@
 package turing;
 
 public class State {
-    private String name;
-    private char value;
+    private final String name;
+    private final char value;
 
     public State(String n, char v){
         this.name = n;

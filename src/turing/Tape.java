@@ -2,7 +2,7 @@ package turing;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tape {
+class Tape {
     private static final char BLANK = 'B';
     private static final char FILL = '1';
 
@@ -107,21 +107,21 @@ public class Tape {
     }
 
     public String[] pointedAt(int atPos){
-        String previous = "";
+        StringBuilder previous = new StringBuilder();
         String current = "";
-        String subsequent = "";
+        StringBuilder subsequent = new StringBuilder();
 
         for(int i=0; i<this.cells.size(); i++){
             if(i<atPos)
-                previous += cells.get(i) + " ";
+                previous.append(cells.get(i)).append(" ");
             else if(i == atPos)
                 current = String.valueOf(cells.get(i));
             else
-                subsequent += cells.get(i) + " ";
+                subsequent.append(cells.get(i)).append(" ");
 
         }
 
-        return new String[]{previous, current, subsequent};
+        return new String[]{previous.toString(), current, subsequent.toString()};
     }
 
     //TODO: check this sometimes

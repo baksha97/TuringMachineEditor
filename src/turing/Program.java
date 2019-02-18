@@ -55,7 +55,7 @@ public class Program {
     }
 
     public int size(){
-        return this.size();
+        return this.size;
     }
 
     public ArrayList<Quadruple> getQuadruples() {

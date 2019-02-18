@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TuringMachine {
     private Program program;
-    private Tape tape;
+    private final Tape tape;
 
     private int executionCount;
 
