@@ -31,7 +31,7 @@ public class Program {
         List<String> lines = new ArrayList<>();
         Scanner prg = new Scanner(in);
         while(prg.hasNextLine()){
-            String line = prg.nextLine();
+            String line = prg.nextLine().trim();
             if(line.contains("//") || line.equals("")) continue;
             lines.add(line);
         }
