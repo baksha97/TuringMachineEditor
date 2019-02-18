@@ -12,7 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("editor.fxml"));
-        primaryStage.setTitle("Turing Machine Editor v2.17.2019"); // 2v2.17.2019.1600");
+        primaryStage.setTitle("Turing Machine Editor v2.18.2019"); // 2v2.18.2019.1300");
         primaryStage.getIcons().add(new Image("computer_icon.png"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
