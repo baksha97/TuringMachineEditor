@@ -2,12 +2,15 @@ package fx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import turing.Program;
 import turing.TuringMachine;
 
@@ -110,12 +113,25 @@ public class Controller implements Initializable {
 
     public void onOpenClicked(){
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open .txt File");
+        fileChooser.setTitle("Open text file");
         fileChooser.setInitialDirectory(Paths.get(".").toFile());
+
         File picked = fileChooser.showOpenDialog(null);
         if(picked == null) return;
         System.out.println(picked.getAbsolutePath());
+        if(!picked.getName().endsWith(".txt")){
+            outputArea.appendText("Not a valid text file. (*.txt)");
+            return;
+        }
         load_file(picked.getAbsolutePath());
+    }
+
+    public void onAboutClicked(){
+        String context = "You can find the latest source code on Github @baksha97."
+                + "\nhttps://github.com/baksha97/TuringMachineEditor";
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, context);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("computer_icon.png"));
+        alert.show();
     }
 
     private void stepAndUpdateUI(){

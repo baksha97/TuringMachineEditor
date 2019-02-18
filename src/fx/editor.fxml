@@ -23,6 +23,11 @@
               <MenuItem mnemonicParsing="false" onAction="#onOpenClicked" text="Open" />
             </items>
           </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onAboutClicked" text="About" />
+            </items>
+          </Menu>
         </menus>
       </MenuBar>
       <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
@@ -39,7 +44,7 @@
             </VBox>
             <AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="462.0" prefWidth="604.0" HBox.hgrow="ALWAYS">
               <children>
-                <Pane layoutY="-6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="72.0" prefWidth="835.0" style="-fx-background-color: #972626;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Pane layoutY="-6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="72.0" prefWidth="835.0" style="-fx-background-color: #00455D;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <children>
                     <Label layoutX="7.0" layoutY="3.0" text="Turing Machine Editor" textFill="WHITE">
                       <font>
@@ -56,7 +61,7 @@
                 </Pane>
                 <AnchorPane layoutX="404.0" layoutY="76.0" prefHeight="186.0" prefWidth="805.0" style="-fx-background-color: #FAFAFA;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
                   <children>
-                    <Label layoutX="48.0" layoutY="14.0" text="Tape Information" textFill="#972626">
+                    <Label layoutX="48.0" layoutY="14.0" text="Tape Information" textFill="#00455d">
                       <font>
                         <Font name="Segoe UI Bold" size="25.0" />
                       </font>
@@ -76,7 +81,7 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <TextFlow fx:id="tapeFlow" layoutX="4.0" layoutY="138.0" prefHeight="48.0" prefWidth="604.0" style="-fx-background-color: #F7E9E9;" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <TextFlow fx:id="tapeFlow" layoutX="4.0" layoutY="138.0" prefHeight="48.0" prefWidth="604.0" style="-fx-background-color: #C0E6F3;" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                         <Label fx:id="currentNumsLabel" layoutX="562.0" layoutY="193.0" text="[Numbers on Tape]" AnchorPane.rightAnchor="8.0">
                            <font>
                               <Font name="System Bold" size="12.0" />
@@ -103,7 +108,7 @@
                         <TextArea fx:id="outputArea" editable="false" layoutY="210.0" prefHeight="125.0" prefWidth="604.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="211.0" />
                         <Label layoutX="14.0" layoutY="193.0" text="Execution Count:" />
                         <Label fx:id="countLabel" layoutX="115.0" layoutY="193.0" prefHeight="17.0" prefWidth="50.0" text="#" />
-                        <TextField fx:id="stepByField" layoutX="481.0" layoutY="347.0" prefHeight="25.0" prefWidth="34.0" promptText="#" text="1" />
+                        <TextField fx:id="stepByField" layoutX="465.0" layoutY="347.0" prefHeight="25.0" prefWidth="50.0" promptText="#" text="1" AnchorPane.rightAnchor="97.0" />
                   </children>
                 </AnchorPane>
               </children>
