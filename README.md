@@ -21,7 +21,7 @@ Quick turing machine editor scratched up for personal usages.
 
 ![alt text](https://i.gyazo.com/ca5d25371dab7b4dce3c1dbb2dcacab9.png)
 
-## Example: x^2
+# x^2
 ```
 1,B,R,299
 299,1,B,399
