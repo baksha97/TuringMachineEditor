@@ -2,7 +2,7 @@ package turing;
 import java.util.ArrayList;
 import java.util.List;
 
-class Tape {
+public class Tape {
     private static final char BLANK = 'B';
     private static final char FILL = '1';
 
@@ -102,11 +102,9 @@ class Tape {
         return pos;
     }
 
-    public char getCurrentCell(){
-        return cells.get(pos);
-    }
+    public TapePartition getTapePartition(){
+        int atPos = getPos();
 
-    public String[] pointedAt(int atPos){
         StringBuilder previous = new StringBuilder();
         String current = "";
         StringBuilder subsequent = new StringBuilder();
@@ -121,10 +119,9 @@ class Tape {
 
         }
 
-        return new String[]{previous.toString(), current, subsequent.toString()};
+        return new TapePartition(new String[]{previous.toString(), current, subsequent.toString()});
     }
 
-    //TODO: check this sometimes
     public List<Integer> currentNumbersOnTape(){
         ArrayList<Integer> res = new ArrayList<>();
         int current = 0;
@@ -141,5 +138,35 @@ class Tape {
         if(current != 0) res.add(current);
 
         return res;
+    }
+
+
+    public static class TapePartition{
+
+        private String left;
+        private String position;
+        private String right;
+
+        public TapePartition(String[] parts){
+            this.left = parts[0];
+            this.position = parts[1];
+            this.right = parts[2];
+        }
+
+        public String getLeft() {
+            return left;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+
+        public String getRight() {
+            return right;
+        }
+
+        public String toString(){
+            return left + " || " + position + " || " + right;
+        }
     }
 }

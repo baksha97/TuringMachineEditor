@@ -7,11 +7,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.input.KeyEvent;
 import turing.Program;
+import turing.Tape;
 import turing.TuringMachine;
 
 import java.io.File;
@@ -48,78 +52,82 @@ public class Controller implements Initializable {
     public TextArea outputArea;
     public TextField stepByField;
 
-    public void step() {
+
+    //Execution Buttons
+    public void onSetClick() {
+        saveEditor();
+        outputArea.setText("");
+        if(!setupTuringMachine()) return;
+        updateInterface();
+    }
+
+    public void onRunClick() {
+        saveEditor();
+        tm.changeProgram(new Program(programArea.getText().trim()));
+        while (tm.hasNextQuadruple()) {
+            tm.executeNextQuadruple();
+        }
+        updateInterface();
+    }
+
+    public void onStepClick() {
         saveEditor();
         tm.changeProgram(new Program(programArea.getText().trim()));
         try {
             int steps = Integer.valueOf(stepByField.getText().trim());
-            for (int i = 0; i < steps; i++) {
-                stepAndUpdateUI();
+            for (int i = 0; i < steps && tm.hasNextQuadruple(); i++) {
+                tm.executeNextQuadruple();
             }
         } catch (Exception e) {
-            outputArea.appendText("Invalid step count input.\n");
+            e.printStackTrace();
+            outputArea.appendText("Invalid onStepClick count input.\n");
+        }
+        updateInterface();
+    }
+
+    public void keyPressed(KeyEvent e){
+        if(e.getCode().equals(KeyCode.ENTER)){
+            onStepClick();
         }
     }
 
-    public void set() {
-        saveEditor();
+
+    //Initialize Turing Machine
+    private boolean inputIsTape(){
+        return inputField.getText().trim().contains("B");
+    }
+
+    private boolean setupTuringMachine(){
         Program p = new Program(programArea.getText().trim());
+        Tape tape;
         try {
-            int[] numbers = Arrays.asList(inputField.getText().trim().split(","))
-                    .stream()
-                    .map(String::trim)
-                    .mapToInt(Integer::parseInt).toArray();
-            tm = new TuringMachine(p, numbers);
-        } catch (Exception e) {
-            String in = inputField.getText().trim();
-            tm = new TuringMachine(p, in);
+            if (inputIsTape()) tape = new Tape(inputField.getText().trim());
+            else {
+                tape = new Tape(Arrays.stream(inputField.getText().trim().split(","))
+                        .mapToInt(s -> Integer.parseInt(s.trim())).toArray());
+            }
+            tm = new TuringMachine(p, tape);
+            return true;
+        }catch (Exception e){
+            outputArea.setText("Invalid input.\n");
+            return false;
         }
-        stateLabel.setText(tm.getTapeState().toString());
-        nextQuadLabel.setText(tm.nextQuadruple().toString());
+    }
+
+
+    //Configure display
+    private void updateInterface(){
+        String prevQuadString =(tm.getPreviousQuadruple() != null) ? tm.getPreviousQuadruple().toString() : "Not executed";
+        prevQuadLabel.setText(prevQuadString);
         setTapeFlow();
+        nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
         currentNumsLabel.setText(tm.numbersOnTape().toString());
-        outputArea.setText("");
-        prevQuadLabel.setText("");
-    }
-
-    public void run() {
-        saveEditor();
-        while (tm.hasNextQuadruple()) {
-            stepAndUpdateUI();
-        }
-    }
-
-    public void onOpenClicked() {
-        File picked = fileChooser.showOpenDialog(null);
-        if (picked == null) return;
-        load_file(picked.getAbsolutePath());
-    }
-
-    public void saveAsDidClick() {
-        File file = fileChooser.showSaveDialog(null);
-        if (file == null) return;
-        save_file(file.getAbsolutePath());
-    }
-
-
-    public void onAboutClicked() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, ABOUT_CONTEXT_MESSAGE);
-        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("computer_icon.png"));
-        alert.show();
-    }
-
-    private void stepAndUpdateUI() {
         if (tm.hasNextQuadruple()) {
-            prevQuadLabel.setText(tm.nextQuadruple().toString());
-            outputArea.appendText("Execution #" + (tm.getExecutionCount() + 1) + " on:\n");
-            outputArea.appendText(tm.toString() + "\n");
-            outputArea.appendText(tm.nextQuadruple().toString() + "\n\n");
-            tm.executeNextQuadruple();
-            setTapeFlow();
-            nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
             stateLabel.setText(tm.getTapeState().toString());
-            currentNumsLabel.setText(tm.numbersOnTape().toString());
-        } else {
+            outputArea.appendText("Execution #" + tm.getExecutionCount() + " on:\n");
+            outputArea.appendText(tm.toString() + "\n");
+            outputArea.appendText(prevQuadString +"\n\n");
+        }else{
             nextQuadLabel.setText("None Available");
             stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
         }
@@ -127,11 +135,10 @@ public class Controller implements Initializable {
 
     private void setTapeFlow() {
         tapeFlow.getChildren().clear();
-        String[] prevCurSub = tm.getTapeDisplay();
-
-        Text prev = new Text(prevCurSub[0]);
-        Text cur = new Text(prevCurSub[1]);
-        Text sub = new Text(prevCurSub[2]);
+        Tape.TapePartition parts = tm.getTapePartition();
+        Text prev = new Text(parts.getLeft());
+        Text cur = new Text(parts.getPosition());
+        Text sub = new Text(parts.getRight());
         prev.setStyle(UNSELECTED_CELL_STYLE);
         cur.setStyle(SELECTED_CELL_STYLE);
         sub.setStyle(UNSELECTED_CELL_STYLE);
@@ -139,6 +146,27 @@ public class Controller implements Initializable {
         countLabel.setText(String.valueOf(tm.getExecutionCount()));
     }
 
+
+    //Menu Buttons
+    public void onOpenClick() {
+        File picked = fileChooser.showOpenDialog(null);
+        if (picked == null) return;
+        load_file(picked.getAbsolutePath());
+    }
+
+    public void onSaveAsClick() {
+        File file = fileChooser.showSaveDialog(null);
+        if (file == null) return;
+        save_file(file.getAbsolutePath());
+    }
+
+    public void onAboutClick() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, ABOUT_CONTEXT_MESSAGE);
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("computer_icon.png"));
+        alert.show();
+    }
+
+    //File editor management
     private void saveEditor() {
         save_file(DEFAULT_PROGRAM_NAME);
     }

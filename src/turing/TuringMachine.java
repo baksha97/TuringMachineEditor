@@ -10,17 +10,14 @@ public class TuringMachine {
     private final Tape tape;
 
     private int executionCount;
+    private Quadruple previousQuadruple;
 
-    public TuringMachine(Program program, int... inputs){
+    public TuringMachine(Program program, Tape tape){
         this.program = program;
-        this.tape = new Tape(inputs);
+        this.tape = tape;
         this.executionCount = 0;
     }
 
-    public TuringMachine(Program program, String startTape){
-        this.program = program;
-        this.tape = new Tape(startTape);
-    }
 
     public void changeProgram(Program p){
         this.program = p;
@@ -34,6 +31,10 @@ public class TuringMachine {
         return tape.getCurrentState();
     }
 
+    public Quadruple getPreviousQuadruple(){
+        return this.previousQuadruple;
+    }
+
     public boolean hasNextQuadruple(){
         return getProgramStates().containsKey(getTapeState());
     }
@@ -44,6 +45,7 @@ public class TuringMachine {
 
     public void executeNextQuadruple(){
         executionCount++;
+        previousQuadruple = nextQuadruple();
         tape.execute(nextQuadruple());
     }
 
@@ -51,8 +53,8 @@ public class TuringMachine {
         return tape.currentNumbersOnTape();
     }
 
-    public String[] getTapeDisplay(){
-        return tape.pointedAt(tape.getPos());
+    public Tape.TapePartition getTapePartition(){
+        return tape.getTapePartition();
     }
 
     public int getExecutionCount() {
@@ -60,6 +62,6 @@ public class TuringMachine {
     }
 
     public String toString(){
-        return Arrays.asList(getTapeDisplay()).toString();
+        return getTapePartition().toString();
     }
 }

@@ -1,8 +1,4 @@
 package turing;
-
-import turing.Quadruple;
-import turing.State;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
