@@ -227,7 +227,7 @@ public class Controller implements Initializable {
                 programArea.appendText(line + "\n");
             }
         } catch (IOException e) {
-            outputArea.setText("No program found.");
+            println("No program found.");
             println(e.getMessage());
         }
     }
