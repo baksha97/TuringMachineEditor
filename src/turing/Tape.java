@@ -1,4 +1,5 @@
 package turing;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,49 +12,52 @@ public class Tape {
     private int pos;
     private State currentState;
 
-    private Tape(){}
+    private Tape() {}
 
-    private void initialize(){
-        cells = new ArrayList<>();
-        cells.add(BLANK);
-        pos = 0;
-        currentState = new State("1", BLANK);
-    }
-
-    public Tape(int... inputs){
+    public Tape(int... inputs) {
         initialize();
-        for(int input: inputs){
+        for (int input : inputs) {
             cells.addAll(intInputAsFill(input));
             cells.add(BLANK);
         }
     }
 
-    public Tape(String input){
+    public Tape(String input) {
         initialize();
-        if(input.charAt(0) == BLANK) cells.remove(0); //remove blank if there is a blank as a placeholder in the manual input
-        for(int i =0; i<input.length(); i++){
+
+        int charCheck = 0;
+        while (input.charAt(charCheck) == BLANK) charCheck++;
+
+        for (int i = charCheck; i < input.length(); i++) {
             char cur = input.charAt(i);
-            if(cur == ' ') continue;
-            if(cur != FILL && cur != BLANK)
+            if (cur == ' ' || cur == ',') continue;
+            if (cur != FILL && cur != BLANK)
                 throw new IllegalArgumentException("Tape input is not valid for: " + cur);
             cells.add(cur);
         }
         cells.add(BLANK);
     }
 
-    private List<Character> intInputAsFill(int x){
+    private void initialize() {
+        cells = new ArrayList<>();
+        cells.add(BLANK);
+        pos = 0;
+        currentState = new State("1", BLANK);
+    }
+
+    private List<Character> intInputAsFill(int x) {
         ArrayList<Character> list = new ArrayList<>(x);
-        for(int i=0; i<x; i++){
+        for (int i = 0; i < x; i++) {
             list.add(FILL);
         }
         return list;
     }
 
-    public void execute(Quadruple q){
-        if(!currentState.equals(q.getStartingState()))
-            throw new IllegalArgumentException("This function cannot be executed.");
+    void execute(Quadruple q) {
+        if (!currentState.equals(q.getStartingState()))
+            throw new IllegalArgumentException("This function cannot be executed because it does not match state.");
 
-        switch (q.getCommand()){
+        switch (q.getCommand()) {
             case LEFT:
                 moveLeft();
                 break;
@@ -72,24 +76,24 @@ public class Tape {
 
     }
 
-    private void moveLeft(){
+    private void moveLeft() {
         pos--;
-        if(pos < 0) {
+        if (pos < 0) {
             cells.add(0, BLANK);
             cells.add(0, BLANK);
             pos += 2;
         }
     }
 
-    private void moveRight(){
+    private void moveRight() {
         pos++;
-        if(pos == cells.size()) {
+        if (pos == cells.size()) {
             cells.add(BLANK);
             cells.add(BLANK);
         }
     }
 
-    public State getCurrentState() {
+    State getCurrentState() {
         return currentState;
     }
 
@@ -98,59 +102,56 @@ public class Tape {
         return cells.toString();
     }
 
-    public int getPos() {
+    private int getPos() {
         return pos;
     }
 
-    public TapePartition getTapePartition(){
-        int atPos = getPos();
-
-        StringBuilder previous = new StringBuilder();
-        String current = "";
-        StringBuilder subsequent = new StringBuilder();
-
-        for(int i=0; i<this.cells.size(); i++){
-            if(i<atPos)
-                previous.append(cells.get(i)).append(" ");
-            else if(i == atPos)
-                current = String.valueOf(cells.get(i));
-            else
-                subsequent.append(cells.get(i)).append(" ");
-
-        }
-
-        return new TapePartition(new String[]{previous.toString(), current, subsequent.toString()});
+    TapePartition getTapePartition() {
+        return new TapePartition(getPos(), cells);
     }
 
-    public List<Integer> currentNumbersOnTape(){
+    List<Integer> currentNumbersOnTape() {
         ArrayList<Integer> res = new ArrayList<>();
         int current = 0;
 
-        for (int i = 0; i<cells.size() ; i++){
-            if(cells.get(i) == FILL){
+        for (int i = 0; i < cells.size(); i++) {
+            if (cells.get(i) == FILL) {
                 current++;
-            }else if(i != 0 && cells.get(i) == BLANK && current != 0){
+            } else if (i != 0 && cells.get(i) == BLANK && current != 0) {
                 res.add(current);
                 current = 0;
             }
         }
 
-        if(current != 0) res.add(current);
+        if (current != 0) res.add(current);
 
         return res;
     }
 
 
-    public static class TapePartition{
+    public static class TapePartition {
 
-        private String left;
-        private String position;
-        private String right;
+        private final String left;
+        private final String position;
+        private final String right;
 
-        public TapePartition(String[] parts){
-            this.left = parts[0];
-            this.position = parts[1];
-            this.right = parts[2];
+        TapePartition(int atPos, ArrayList<Character> cells) {
+            StringBuilder previous = new StringBuilder();
+            String current = "";
+            StringBuilder subsequent = new StringBuilder();
+
+            for (int i = 0; i < cells.size(); i++) {
+                if (i < atPos)
+                    previous.append(cells.get(i)).append(" ");
+                else if (i == atPos)
+                    current = String.valueOf(cells.get(i));
+                else
+                    subsequent.append(cells.get(i)).append(" ");
+
+            }
+            left = previous.toString();
+            position = current;
+            right = subsequent.toString();
         }
 
         public String getLeft() {
@@ -165,7 +166,7 @@ public class Tape {
             return right;
         }
 
-        public String toString(){
+        public String toString() {
             return left + " || " + position + " || " + right;
         }
     }

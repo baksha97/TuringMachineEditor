@@ -4,12 +4,12 @@ public class State {
     private final String name;
     private final char value;
 
-    public State(String n, char v){
+    public State(String n, char v) {
         this.name = n;
         this.value = v;
     }
 
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -20,12 +20,12 @@ public class State {
         return false;
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return toString().hashCode();
     }
 
-    public String toString(){
-        return "(Q" + name + ": @" +  value +")";
+    public String toString() {
+        return "Q" + name + ": " + value;
     }
 
 }

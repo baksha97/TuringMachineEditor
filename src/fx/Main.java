@@ -9,17 +9,16 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("editor.fxml"));
-        primaryStage.setTitle("Turing Machine Editor v2.18.2019"); // 2v2.18.2019.1300");
+        primaryStage.setTitle("Turing Machine Editor v2.19.2019");
         primaryStage.getIcons().add(new Image("computer_icon.png"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

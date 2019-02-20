@@ -8,12 +8,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyEvent;
 import turing.Program;
 import turing.Tape;
 import turing.TuringMachine;
@@ -32,14 +31,10 @@ public class Controller implements Initializable {
 
     private static final String ABOUT_CONTEXT_MESSAGE =
             "You can find the latest source code on Github @baksha97."
-            + "\nhttps://github.com/baksha97/TuringMachineEditor";
+                    + "\nhttps://github.com/baksha97/TuringMachineEditor";
     private static final String SELECTED_CELL_STYLE = "-fx-text-fill: green; -fx-font-size: 32px;";
     private static final String UNSELECTED_CELL_STYLE = "-fx-font: 16 arial;";
     private static final String DEFAULT_PROGRAM_NAME = "current-program.txt";
-
-    private TuringMachine tm;
-    private FileChooser fileChooser;
-
     @FXML
     public TextField inputField;
     public TextArea programArea;
@@ -51,19 +46,20 @@ public class Controller implements Initializable {
     public Label countLabel;
     public TextArea outputArea;
     public TextField stepByField;
-
+    private TuringMachine tm;
+    private FileChooser fileChooser;
 
     //Execution Buttons
     public void onSetClick() {
-        saveEditor();
         outputArea.setText("");
-        if(!setupTuringMachine()) return;
+        saveEditor();
+        if (!setupTuringMachine()) return;
         updateInterface();
     }
 
     public void onRunClick() {
         saveEditor();
-        tm.changeProgram(new Program(programArea.getText().trim()));
+        updateProgram();
         while (tm.hasNextQuadruple()) {
             tm.executeNextQuadruple();
         }
@@ -72,32 +68,31 @@ public class Controller implements Initializable {
 
     public void onStepClick() {
         saveEditor();
-        tm.changeProgram(new Program(programArea.getText().trim()));
+        updateProgram();
         try {
             int steps = Integer.valueOf(stepByField.getText().trim());
             for (int i = 0; i < steps && tm.hasNextQuadruple(); i++) {
                 tm.executeNextQuadruple();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            outputArea.appendText("Invalid onStepClick count input.\n");
+            println("Invalid step count input.");
         }
         updateInterface();
     }
 
-    public void keyPressed(KeyEvent e){
-        if(e.getCode().equals(KeyCode.ENTER)){
+    public void keyPressed(KeyEvent e) {
+        if (e.getCode().equals(KeyCode.ENTER)) {
             onStepClick();
         }
     }
 
 
     //Initialize Turing Machine
-    private boolean inputIsTape(){
-        return inputField.getText().trim().contains("B");
+    private boolean inputIsTape() {
+        return inputField.getText().contains("B");
     }
 
-    private boolean setupTuringMachine(){
+    private boolean setupTuringMachine() {
         Program p = new Program(programArea.getText().trim());
         Tape tape;
         try {
@@ -108,28 +103,32 @@ public class Controller implements Initializable {
             }
             tm = new TuringMachine(p, tape);
             return true;
-        }catch (Exception e){
-            outputArea.setText("Invalid input.\n");
+        } catch (Exception e) {
+            println("Invalid input.");
             return false;
         }
     }
 
+    private void updateProgram() {
+        tm.changeProgram(new Program(programArea.getText().trim()));
+    }
 
     //Configure display
-    private void updateInterface(){
-        String prevQuadString =(tm.getPreviousQuadruple() != null) ? tm.getPreviousQuadruple().toString() : "Not executed";
+    private void updateInterface() {
+        String prevQuadString = (tm.getPreviousQuadruple() != null) ? tm.getPreviousQuadruple().toString() : "Not executed";
         prevQuadLabel.setText(prevQuadString);
         setTapeFlow();
         nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
         currentNumsLabel.setText(tm.numbersOnTape().toString());
         if (tm.hasNextQuadruple()) {
             stateLabel.setText(tm.getTapeState().toString());
-            outputArea.appendText("Execution #" + tm.getExecutionCount() + " on:\n");
-            outputArea.appendText(tm.toString() + "\n");
-            outputArea.appendText(prevQuadString +"\n\n");
-        }else{
+            println("Execution #" + tm.getExecutionCount() + " on:");
+            println(tm);
+            println(prevQuadString + "\n");
+        } else {
             nextQuadLabel.setText("None Available");
             stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
+            println("Machine Halted...");
         }
     }
 
@@ -145,7 +144,6 @@ public class Controller implements Initializable {
         tapeFlow.getChildren().addAll(prev, cur, sub);
         countLabel.setText(String.valueOf(tm.getExecutionCount()));
     }
-
 
     //Menu Buttons
     public void onOpenClick() {
@@ -164,6 +162,15 @@ public class Controller implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, ABOUT_CONTEXT_MESSAGE);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("computer_icon.png"));
         alert.show();
+    }
+
+    //Helper
+    private void println(String s) {
+        outputArea.appendText(s + "\n");
+    }
+
+    private void println(Object o) {
+        println(o.toString());
     }
 
     //File editor management
@@ -199,7 +206,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void initializeFileChooser(){
+    private void initializeFileChooser() {
         fileChooser = new FileChooser();
         fileChooser.setTitle("File Management");
         fileChooser.setInitialDirectory(Paths.get(".").toFile());
