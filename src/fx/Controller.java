@@ -1,7 +1,5 @@
 package fx;
 
-import com.sun.javafx.scene.control.skin.ScrollBarSkin;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -23,6 +21,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Key;
 import java.util.*;
 
 
@@ -31,8 +30,6 @@ public class Controller implements Initializable {
     private static final String ABOUT_CONTEXT_MESSAGE =
             "You can find the latest source code on Github @baksha97."
                     + "\nhttps://github.com/baksha97/TuringMachineEditor";
-    private static final String SELECTED_CELL_STYLE = "-fx-text-fill: green; -fx-font-size: 32px;";
-    private static final String UNSELECTED_CELL_STYLE = "-fx-font: 16 arial;";
     private static final String DEFAULT_PROGRAM_NAME = "current-program.txt";
     @FXML
     public TextField inputField;
@@ -89,13 +86,6 @@ public class Controller implements Initializable {
         updateInterface();
     }
 
-    public void keyPressed(KeyEvent e) {
-        if (e.getCode().equals(KeyCode.ENTER)) {
-            onStepClick();
-        }
-    }
-
-
     //Initialize Turing Machine
     private boolean inputIsTape() {
         return inputField.getText().contains("B");
@@ -106,28 +96,14 @@ public class Controller implements Initializable {
             Program p = new Program(programArea.getText().trim());
             Tape tape;
 
-            if (inputIsTape()) tape = new Tape(inputField.getText().trim());
-            else {
+            if (inputIsTape()){
+                tape = new Tape(inputField.getText().trim());
+            }else {
                 tape = new Tape(Arrays.stream(inputField.getText().trim().split(","))
                         .mapToInt(s -> Integer.parseInt(s.trim())).toArray());
             }
-            tm = new TuringMachine(p, tape);
-
-            listView.setItems(tm.getObservableList());
-            listView.setCellFactory(cell -> new ListCell<Character>() {
-                @Override
-                protected void updateItem(Character item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item != null) {
-                        setText(String.valueOf(item));
-                        setFont(Font.font(18));
-                    } else {
-                        setGraphic(null);
-                        setText(null);
-                    }
-                }
-            });
-
+            this.tm = new TuringMachine(p, tape);
+            setupListViewForTuring();
             return true;
         } catch (ArrayIndexOutOfBoundsException ae) {
             println("Invalid input in editor.");
@@ -135,15 +111,28 @@ public class Controller implements Initializable {
         } catch (Exception e) {
             println("Invalid input.");
             println(e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
 
     private void setupListViewForTuring(){
-
+        listView.setItems(tm.getObservableList());
+        listView.setCellFactory(cell -> new ListCell<Character>() {
+            @Override
+            protected void updateItem(Character item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null) {
+                    setText(String.valueOf(item));
+                    setFont(Font.font(18));
+                } else {
+                    setGraphic(null);
+                    setText(null);
+                }
+            }
+        });
     }
 
+    //Use new program upon any execution
     private void updateProgram() {
         tm.changeProgram(new Program(programArea.getText().trim()));
     }
@@ -171,8 +160,7 @@ public class Controller implements Initializable {
         listView.scrollTo(tm.getPos());
         listView.getSelectionModel().select(tm.getPos());
     }
-
-
+    
     //Menu Buttons
     public void onOpenClick() {
         File picked = fileChooser.showOpenDialog(null);
@@ -192,7 +180,17 @@ public class Controller implements Initializable {
         alert.show();
     }
 
-    //Helper
+    //Keyboard events
+    public void keyPressed(KeyEvent e) {
+        if(e.getCode().equals(KeyCode.ENTER) && e.isShiftDown()){
+            onSetClick();
+        }
+        else if (e.getCode().equals(KeyCode.ENTER)) {
+            onStepClick();
+        }
+    }
+
+    //Out - communication
     private void println(String s) {
         outputArea.appendText(s + "\n");
     }
