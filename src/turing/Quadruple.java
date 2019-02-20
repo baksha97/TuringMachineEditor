@@ -9,13 +9,16 @@ public class Quadruple {
     private final State startingState;
 
     public Quadruple(String line) {
-        String[] partition = line.split(",", 4); //ex: q1,B,R,q2
-        this.start = partition[0];
-        this.conditional = partition[1].charAt(0);
-        this.command = Command.fromString(partition[2]);
-        this.end = partition[3];
-
-        this.startingState = new State(start, conditional);
+        try {
+            String[] partition = line.split(",", 4); //ex: q1,B,R,q2
+            this.start = partition[0];
+            this.conditional = partition[1].charAt(0);
+            this.command = Command.fromString(partition[2]);
+            this.end = partition[3];
+            this.startingState = new State(start, conditional);
+        }catch (IndexOutOfBoundsException e){
+            throw new IllegalArgumentException("Line does not fit format: " + line);
+        }
     }
 
     Command getCommand() {

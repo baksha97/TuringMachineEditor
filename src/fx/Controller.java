@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import turing.Program;
+import turing.Quadruple;
 import turing.Tape;
 import turing.TuringMachine;
 
@@ -117,6 +118,7 @@ public class Controller implements Initializable {
 
     private void setupListViewForTuring(){
         listView.setItems(tm.getObservableList());
+//        listView.refresh();
         listView.setCellFactory(cell -> new ListCell<Character>() {
             @Override
             protected void updateItem(Character item, boolean empty) {
@@ -140,8 +142,9 @@ public class Controller implements Initializable {
     //Configure display
     private void updateInterface() {
         String prevQuadString = (tm.getPreviousQuadruple() != null) ? tm.getPreviousQuadruple().toString() : "Not executed";
+        String nextQuadString = ((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available";
         prevQuadLabel.setText(prevQuadString);
-        nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
+        nextQuadLabel.setText(nextQuadString);
         currentNumsLabel.setText(tm.numbersOnTape().toString());
         countLabel.setText(String.valueOf(tm.getExecutionCount()));
         positionLabel.setText("Cell position: #" + tm.getPos());
@@ -151,6 +154,7 @@ public class Controller implements Initializable {
             println(prevQuadString);
             println(tm);
             println(tm.numbersOnTape());
+            println("");
         } else {
             nextQuadLabel.setText("None Available");
             stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
@@ -160,7 +164,7 @@ public class Controller implements Initializable {
         listView.scrollTo(tm.getPos());
         listView.getSelectionModel().select(tm.getPos());
     }
-    
+
     //Menu Buttons
     public void onOpenClick() {
         File picked = fileChooser.showOpenDialog(null);
