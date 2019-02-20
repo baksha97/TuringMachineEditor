@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -12,7 +13,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
 
 <VBox fx:id="vbox" onKeyPressed="#keyPressed" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fx.Controller">
     <MenuBar>
@@ -68,8 +68,8 @@
                         <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
-                <TextFlow fx:id="tapeFlow" layoutX="4.0" layoutY="138.0" prefHeight="57.0" prefWidth="604.0" style="-fx-background-color: #C0E6F3;" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="138.0" />
-                <Label fx:id="currentNumsLabel" layoutX="482.0" layoutY="211.0" text="[Numbers on Tape]" AnchorPane.rightAnchor="12.0">
+            <ListView fx:id="listView" orientation="HORIZONTAL" prefHeight="68.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="138.0" />
+                <Label fx:id="currentNumsLabel" alignment="BOTTOM_RIGHT" layoutX="482.0" layoutY="211.0" prefHeight="17.0" prefWidth="178.0" text="[Numbers on Tape]" AnchorPane.rightAnchor="12.0">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
@@ -100,6 +100,7 @@
                 <Label layoutX="4.0" layoutY="211.0" text="Execution Count:" />
                 <Label fx:id="countLabel" layoutX="92.0" layoutY="211.0" prefHeight="17.0" prefWidth="50.0" text="#" AnchorPane.leftAnchor="98.0" />
                 <TextField fx:id="stepByField" layoutX="465.0" layoutY="347.0" prefHeight="25.0" prefWidth="50.0" promptText="#" text="1" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="97.0" />
+            <Label fx:id="positionLabel" alignment="BOTTOM_RIGHT" layoutX="771.0" layoutY="119.0" prefHeight="17.0" prefWidth="110.0" text="Cell Position: #" textAlignment="RIGHT" AnchorPane.rightAnchor="10.0" />
             </AnchorPane>
         </AnchorPane>
     </HBox>

@@ -1,5 +1,7 @@
 package turing;
 
+import javafx.collections.ObservableList;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,8 +52,13 @@ public class TuringMachine {
         return tape.currentNumbersOnTape();
     }
 
-    public Tape.Partition getTapePartition() {
-        return tape.getTapePartition();
+
+    public ObservableList<Character> getObservableList(){
+        return tape.getCells();
+    }
+
+    public int getPos(){
+        return tape.getPos();
     }
 
     public int getExecutionCount() {
@@ -59,6 +66,6 @@ public class TuringMachine {
     }
 
     public String toString() {
-        return getTapePartition().toString();
+        return tape.toString();
     }
 }

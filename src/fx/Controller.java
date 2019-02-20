@@ -1,16 +1,15 @@
 package fx;
 
+import com.sun.javafx.scene.control.skin.ScrollBarSkin;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import turing.Program;
@@ -42,10 +41,11 @@ public class Controller implements Initializable {
     public Label prevQuadLabel;
     public Label nextQuadLabel;
     public Label currentNumsLabel;
-    public TextFlow tapeFlow;
+    public ListView<Character> listView;
     public Label countLabel;
     public TextArea outputArea;
     public TextField stepByField;
+    public Label positionLabel;
     private TuringMachine tm;
     private FileChooser fileChooser;
 
@@ -59,7 +59,7 @@ public class Controller implements Initializable {
 
     public void onRunClick() {
         saveEditor();
-        if(tm == null){
+        if (tm == null) {
             println("Setup first.");
             return;
         }
@@ -72,7 +72,7 @@ public class Controller implements Initializable {
 
     public void onStepClick() {
         saveEditor();
-        if(tm == null){
+        if (tm == null) {
             println("Setup first.");
             return;
         }
@@ -112,8 +112,25 @@ public class Controller implements Initializable {
                         .mapToInt(s -> Integer.parseInt(s.trim())).toArray());
             }
             tm = new TuringMachine(p, tape);
+
+            listView.setItems(tm.getObservableList());
+            listView.setCellFactory(cell -> new ListCell<Character>() {
+                @Override
+                protected void updateItem(Character item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null) {
+                        setText(String.valueOf(item));
+                        setFont(Font.font(18));
+                    } else {
+                        setGraphic(null);
+                        setText(null);
+                    }
+                }
+            });
+
+
             return true;
-        } catch (ArrayIndexOutOfBoundsException ae){
+        } catch (ArrayIndexOutOfBoundsException ae) {
             println("Invalid input in editor.");
             return false;
         } catch (Exception e) {
@@ -124,6 +141,10 @@ public class Controller implements Initializable {
         }
     }
 
+    private void setupListViewForTuring(){
+        
+    }
+
     private void updateProgram() {
         tm.changeProgram(new Program(programArea.getText().trim()));
     }
@@ -132,10 +153,10 @@ public class Controller implements Initializable {
     private void updateInterface() {
         String prevQuadString = (tm.getPreviousQuadruple() != null) ? tm.getPreviousQuadruple().toString() : "Not executed";
         prevQuadLabel.setText(prevQuadString);
-        setTapeFlow();
         nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
         currentNumsLabel.setText(tm.numbersOnTape().toString());
         countLabel.setText(String.valueOf(tm.getExecutionCount()));
+        positionLabel.setText("Cell position: #" + tm.getPos());
         if (tm.hasNextQuadruple()) {
             stateLabel.setText(tm.getTapeState().toString());
             println("Execution #" + tm.getExecutionCount() + " on:");
@@ -147,19 +168,11 @@ public class Controller implements Initializable {
             stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
             println("Machine Halted...");
         }
+
+        listView.scrollTo(tm.getPos());
+        listView.getSelectionModel().select(tm.getPos());
     }
 
-    private void setTapeFlow() {
-        tapeFlow.getChildren().clear();
-        Tape.Partition parts = tm.getTapePartition();
-        Text prev = new Text(parts.getLeft());
-        Text cur = new Text(parts.getPosition());
-        Text sub = new Text(parts.getRight());
-        prev.setStyle(UNSELECTED_CELL_STYLE);
-        cur.setStyle(SELECTED_CELL_STYLE);
-        sub.setStyle(UNSELECTED_CELL_STYLE);
-        tapeFlow.getChildren().addAll(prev, cur, sub);
-    }
 
     //Menu Buttons
     public void onOpenClick() {
@@ -186,7 +199,7 @@ public class Controller implements Initializable {
     }
 
     private void println(Object o) {
-        println(o.toString());
+        println(String.valueOf(o));
     }
 
     //File editor management
@@ -236,3 +249,5 @@ public class Controller implements Initializable {
         load_file(DEFAULT_PROGRAM_NAME);
     }
 }
+
+
