@@ -1,6 +1,6 @@
 # TuringMachineEditor
 Quick turing machine editor scratched up for personal usages.
-![alt text](https://i.gyazo.com/c6f72e4ec494bc475f35a2a28468fe9f.png)
+![alt text](https://i.gyazo.com/7bff5dccf8883f7dcbcb47103648674f.png)
 
 ## Features
 - Open files
@@ -17,11 +17,16 @@ Quick turing machine editor scratched up for personal usages.
 - An output area to view previous tapes and executions.
 - States, although commonly represented by numbers are actually strings -so you may use actual words for each Quadruple.
 
+#### File Open/Save 
+![Stepping](https://i.gyazo.com/3a7b9edcb0fe8a18fede4753345ad45c.gif)
 
+#### Step 
+![Stepping](https://i.gyazo.com/dea7f2e620604dbfb75f794192782093.gif)
 
-![alt text](https://i.gyazo.com/ca5d25371dab7b4dce3c1dbb2dcacab9.png)
+#### Run
+![Running](https://i.gyazo.com/0d4be619f0d233bd4709db7c02559f9b.gif)
 
-# x^2
+### x^2
 ```
 1,B,R,299
 299,1,B,399
