@@ -1,21 +1,67 @@
-# TuringMachineEditor
-Quick turing machine editor scratched up for personal usages.
-![alt text](https://i.gyazo.com/7bff5dccf8883f7dcbcb47103648674f.png)
 
-## Features
-- Open files
-- Save files
-- In window editor: ignores empty lines, lines with "//", and trailing/leading whitespace.
-- In window tape display
-- Labels for previous & next execution
-- Current Turing Machine state
-- Count for # of executions on machine
-- Numerical conversions for current numbers on tape
-- Enter "Step by" amount to jump to a particular point in execution
-- Use ENTER KEY as an alternative to clicking on the Step button repeatedly (you may hold it down as well)
-- Every time you "Run" or "Step" a file in the current working directory is updated with the current program as to not lose any work if you program an infinite loop.
-- An output area to view previous tapes and executions.
-- States, although commonly represented by numbers are actually strings -so you may use actual words for each Quadruple.
+# TuringMachineEditor
+This program allows creation, loading, editing, and stepping through your own Turing Machine programs with the three commands:
+1. Move left
+2. Move right
+3. Print
+
+## Instructions / How-to's
+
+### Input Tape
+
+ - In this machine, you may initialize your starting tape 1 of 2 ways.
+	 1. Entering the tape itself: ``B111B111``
+		 - If you enter the tape itself, it must contain a `B`to be entered as a manual tape entry. Otherwise, it will be considered a numeric entry. 
+		 - 
+			 **Acceptable input:**
+			 - [x] `B111`
+			 - [x] `111B`
+			 - [x] `BBBBB111`
+			 - [x] `B 1 1  1` 
+			 - [x] `B,1,1,1,B`
+	2. To easily enter an input tape, simply add the number. Multiple inputs require a `,` as a separator. 
+  *Avoid excess white-space and numbers that would cause integer overflow.*
+		- **Acceptable input:**
+			 - [x] ``2``
+			 - [x]  ``2``
+			 - [x] `7,6`
+			 - [x] `3,4,9,7` 
+
+### Program Editor
+ - Editor ignores/works around:
+	 - Empty lines (space out your work)
+	 - Lines containing "//" (comment or take out a line instead of deleting it)
+	 - Trailing/Leading white-space (so you don't have to worry about checking for white-space)
+ - The quadruple states are treated as Strings; you do not need to use numbers for the states & you may append letters to numbers to make a valid state, for example; 
+    ```
+    10d,B,L,1m
+    1m,1,L,1c 
+    ```
+ - Every time you click "Step" or "Run," the current program in the editor is saved automatically to a text-file `current-program.txt` in your current working directory. This is so that if you accidentally program yourself into an infinite loop and the machine freezes, you have your work saved.
+ - The editor automatically loads `current-program.txt` if it is located in the current working directory.
+ - You may add new Quadruples into the editor without having to reset your machine, just click Run or Step and it will add your Quadruple to the machine and unhalt it if a state is found for it's current state. **BE WARY OF EDITING YOUR PROGRAM THIS WAY.** You may change your program so-much-so that you the machine will be unable to get back to that position if you've removed or edited a Quadruple that got you to your current state. If you're careful, this can be very helpful in programming something from scratch and adding new lines stet by step.
+
+### Execution
+ - Once you've set your program by clicking "Setup/Reset" or using `SHIFT-ENTER`, you may now run your program or step through it.
+	 - Every time you step through your program, you will leave a history in the output area to go back and revise previous steps and executions.
+	 - You can choose the amount of steps you would like to take per "Step" button click or `ENTER` hits. 
+	 - *HINT: If you seem to have an error in your code, narrow your clicking and your searching by using the number of steps to jump to a specific execution.*
+- If you would like to use `ENTER` to execute your program, do so in any of the text fields (not the program editor). You may also hold down the `ENTER` and watch as the ListView moves across each cell.
+- As the tape expands, the list grows horizontally; you may scroll to have a better view of the tape or you may simply widen your program window. Once a cell has been expanded to, it does not ever shrink in space.
+- Instead of counting all the ones, you may look at the numbers in the square brackets. After every step and execution, the numbers are recalculated and shown there. 
+- Be wary of bigger inputs. They work. *Mostly*. 
+
+### File Management
+
+ - The File Manager automatically opens on the current working directory.
+ - You may open any `*.txt`file into the editor. 
+	 - When you open a file, remember that you're not changing the file. You've opened it into the current editor's memory. Again, once you click Step/Run, the `current-program.txt` is then overwritten with the current editor contents. 
+- You may save anything in your editor to a separate text file. 
+
+### TO - DO's
+
+ - [ ] Find a way to prevent the user from deselecting the selected (positioned) cell while still giving them the ability to freely scroll the ListView.
+
 
 #### File Open/Save 
 ![Stepping](https://i.gyazo.com/3a7b9edcb0fe8a18fede4753345ad45c.gif)
@@ -26,7 +72,7 @@ Quick turing machine editor scratched up for personal usages.
 #### Run
 ![Running](https://i.gyazo.com/0d4be619f0d233bd4709db7c02559f9b.gif)
 
-### x^2
+#### Program: x^2
 ```
 1,B,R,299
 299,1,B,399
