@@ -11,7 +11,6 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import turing.Program;
-import turing.Quadruple;
 import turing.Tape;
 import turing.TuringMachine;
 
@@ -22,7 +21,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Key;
 import java.util.*;
 
 
@@ -30,7 +28,8 @@ public class Controller implements Initializable {
 
     private static final String ABOUT_CONTEXT_MESSAGE =
             "You can find the latest source code on Github @baksha97."
-                    + "\nhttps://github.com/baksha97/TuringMachineEditor";
+                    + "\n\thttps://github.com/baksha97/TuringMachineEditor"
+                    + "\nBe sure to check out any branches for works in progress & please create an issue if a problem is found.";
     private static final String DEFAULT_PROGRAM_NAME = "current-program.txt";
     @FXML
     public TextField inputField;
@@ -151,10 +150,9 @@ public class Controller implements Initializable {
         if (tm.hasNextQuadruple()) {
             stateLabel.setText(tm.getTapeState().toString());
             println("Execution #" + tm.getExecutionCount() + " on:");
-            println(prevQuadString);
-            println(tm);
-            println(tm.numbersOnTape());
-            println("");
+            printlnt(prevQuadString);
+            printlnt(tm);
+            printlnt(tm.numbersOnTape());
         } else {
             nextQuadLabel.setText("None Available");
             stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
@@ -181,6 +179,7 @@ public class Controller implements Initializable {
     public void onAboutClick() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, ABOUT_CONTEXT_MESSAGE);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("computer_icon.png"));
+        alert.setHeaderText("About Editor");
         alert.show();
     }
 
@@ -195,12 +194,16 @@ public class Controller implements Initializable {
     }
 
     //Out - communication
-    private void println(String s) {
-        outputArea.appendText(s + "\n");
-    }
+//    private void println(String s) {
+//        outputArea.appendText(s + "\n");
+//    }
 
     private void println(Object o) {
-        println(String.valueOf(o));
+        outputArea.appendText(o + "\n");
+    }
+
+    private void printlnt(Object o){
+        println("\t" + o);
     }
 
     //File editor management
