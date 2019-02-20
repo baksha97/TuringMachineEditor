@@ -1,106 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<VBox fx:id="vbox" onKeyPressed="#keyPressed" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fx.Controller">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="vbox" onKeyPressed="#keyPressed"
+      xmlns="http://javafx.com/javafx/10.0.1" fx:controller="fx.Controller">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" onAction="#onOpenClick" text="Open" />
-            <MenuItem fx:id="onSaveAsClick" mnemonicParsing="false" onAction="#onSaveAsClick" text="Save as..." />
+            <MenuItem mnemonicParsing="false" onAction="#onOpenClick" text="Open"/>
+            <MenuItem fx:id="onSaveAsClick" mnemonicParsing="false" onAction="#onSaveAsClick" text="Save as..."/>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
-            <MenuItem mnemonicParsing="false" onAction="#onAboutClick" text="About" />
+            <MenuItem mnemonicParsing="false" onAction="#onAboutClick" text="About"/>
         </Menu>
     </MenuBar>
     <HBox alignment="CENTER" prefHeight="462.0" prefWidth="1073.0" VBox.vgrow="ALWAYS">
         <VBox minWidth="-Infinity" prefHeight="462.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
-            <TextField fx:id="inputField" prefHeight="25.0" prefWidth="291.0" promptText="Enter input: ex 2,3" />
-            <TextArea fx:id="programArea" prefHeight="437.0" prefWidth="228.0" promptText="Write code. Comments and blank new lines allowed." VBox.vgrow="ALWAYS">
+            <TextField fx:id="inputField" prefHeight="25.0" prefWidth="291.0" promptText="Enter input: ex 2,3"/>
+            <TextArea fx:id="programArea" prefHeight="437.0" prefWidth="228.0"
+                      promptText="Write code. Comments and blank new lines allowed." VBox.vgrow="ALWAYS">
                 <font>
-                    <Font size="14.0" />
+                    <Font size="14.0"/>
                 </font>
             </TextArea>
         </VBox>
-        <AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="462.0" prefWidth="604.0" HBox.hgrow="ALWAYS">
-            <Pane layoutY="-6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="72.0" prefWidth="835.0" style="-fx-background-color: #00455D;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                    prefHeight="462.0" prefWidth="604.0" HBox.hgrow="ALWAYS">
+            <Pane layoutY="-6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="72.0"
+                  prefWidth="835.0" style="-fx-background-color: #00455D;" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <Label layoutX="7.0" layoutY="3.0" text="Turing Machine Editor" textFill="WHITE">
                     <font>
-                        <Font name="Segoe UI Bold" size="17.0" />
+                        <Font name="Segoe UI Bold" size="17.0"/>
                     </font>
                 </Label>
-                <Label layoutX="7.0" layoutY="28.0" text="     By: Alfayed Baksh (Travis)" textFill="WHITE" />
+                <Label layoutX="7.0" layoutY="28.0" text="     By: Alfayed Baksh (Travis)" textFill="WHITE"/>
                 <Label layoutX="7.0" layoutY="50.0" text="Inspired by: Professor Ronald Fechter Ph.D." textFill="WHITE">
                     <font>
-                        <Font size="11.0" />
+                        <Font size="11.0"/>
                     </font>
                 </Label>
             </Pane>
-            <AnchorPane layoutX="404.0" layoutY="76.0" prefHeight="186.0" prefWidth="805.0" style="-fx-background-color: #FAFAFA;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+            <AnchorPane layoutX="404.0" layoutY="76.0" prefHeight="186.0" prefWidth="805.0"
+                        style="-fx-background-color: #FAFAFA;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                        AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
                 <Label layoutX="48.0" layoutY="14.0" text="Tape Information" textFill="#00455d">
                     <font>
-                        <Font name="Segoe UI Bold" size="25.0" />
+                        <Font name="Segoe UI Bold" size="25.0"/>
                     </font>
                 </Label>
                 <Label layoutX="48.0" layoutY="48.0" text="Previous Quadruple:">
                     <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="18.0"/>
                     </font>
                 </Label>
                 <Label layoutX="48.0" layoutY="75.0" text="Current State:">
                     <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="18.0"/>
                     </font>
                 </Label>
                 <Label layoutX="48.0" layoutY="102.0" text="Next Quadruple:">
                     <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="18.0"/>
                     </font>
                 </Label>
-            <ListView fx:id="listView" orientation="HORIZONTAL" prefHeight="68.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="138.0" />
-                <Label fx:id="currentNumsLabel" alignment="BOTTOM_RIGHT" layoutX="482.0" layoutY="211.0" prefHeight="17.0" prefWidth="178.0" text="[Numbers on Tape]" AnchorPane.rightAnchor="12.0">
+                <ListView fx:id="listView" orientation="HORIZONTAL" prefHeight="68.0" prefWidth="200.0"
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="138.0"/>
+                <Label fx:id="currentNumsLabel" alignment="BOTTOM_RIGHT" layoutX="482.0" layoutY="211.0"
+                       prefHeight="17.0" prefWidth="178.0" text="[Numbers on Tape]" AnchorPane.rightAnchor="12.0">
                     <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="12.0"/>
                     </font>
                 </Label>
-                <Button layoutX="538.0" layoutY="347.0" mnemonicParsing="false" onAction="#onStepClick" prefHeight="25.0" prefWidth="75.0" text="Step" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                <Button layoutX="129.0" layoutY="347.0" mnemonicParsing="false" onAction="#onRunClick" prefHeight="25.0" prefWidth="75.0" text="Run" AnchorPane.bottomAnchor="14.0" />
-                <Button layoutX="14.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSetClick" prefHeight="25.0" prefWidth="103.0" text="Setup / Reset" AnchorPane.bottomAnchor="14.0" />
-                <Label fx:id="prevQuadLabel" layoutX="228.0" layoutY="51.0" prefHeight="17.0" prefWidth="376.0" text="||" AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="0.0">
+                <Button layoutX="538.0" layoutY="347.0" mnemonicParsing="false" onAction="#onStepClick"
+                        prefHeight="25.0" prefWidth="75.0" text="Step" AnchorPane.bottomAnchor="14.0"
+                        AnchorPane.rightAnchor="14.0"/>
+                <Button layoutX="129.0" layoutY="347.0" mnemonicParsing="false" onAction="#onRunClick" prefHeight="25.0"
+                        prefWidth="75.0" text="Run" AnchorPane.bottomAnchor="14.0"/>
+                <Button layoutX="14.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSetClick" prefHeight="25.0"
+                        prefWidth="103.0" text="Setup / Reset" AnchorPane.bottomAnchor="14.0"/>
+                <Label fx:id="prevQuadLabel" layoutX="228.0" layoutY="51.0" prefHeight="17.0" prefWidth="376.0"
+                       text="||" AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="0.0">
                     <font>
-                        <Font name="Calibri" size="18.0" />
+                        <Font name="Calibri" size="18.0"/>
                     </font>
                 </Label>
-                <Label fx:id="stateLabel" layoutX="228.0" layoutY="75.0" prefHeight="27.0" prefWidth="376.0" text="||" AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="0.0">
+                <Label fx:id="stateLabel" layoutX="228.0" layoutY="75.0" prefHeight="27.0" prefWidth="376.0" text="||"
+                       AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="0.0">
                     <font>
-                        <Font name="Calibri" size="18.0" />
+                        <Font name="Calibri" size="18.0"/>
                     </font>
                 </Label>
-                <Label fx:id="nextQuadLabel" layoutX="228.0" layoutY="105.0" prefHeight="17.0" prefWidth="376.0" text="||" AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="0.0">
+                <Label fx:id="nextQuadLabel" layoutX="228.0" layoutY="105.0" prefHeight="17.0" prefWidth="376.0"
+                       text="||" AnchorPane.leftAnchor="228.0" AnchorPane.rightAnchor="0.0">
                     <font>
-                        <Font name="Calibri" size="18.0" />
+                        <Font name="Calibri" size="18.0"/>
                     </font>
                 </Label>
-                <TextArea fx:id="outputArea" editable="false" layoutY="210.0" prefHeight="125.0" prefWidth="604.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0">
+                <TextArea fx:id="outputArea" editable="false" layoutY="210.0" prefHeight="125.0" prefWidth="604.0"
+                          AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                          AnchorPane.topAnchor="230.0">
                     <font>
-                        <Font size="14.0" />
+                        <Font size="14.0"/>
                     </font>
                 </TextArea>
-                <Label layoutX="4.0" layoutY="211.0" text="Execution Count:" />
-                <Label fx:id="countLabel" layoutX="92.0" layoutY="211.0" prefHeight="17.0" prefWidth="50.0" text="#" AnchorPane.leftAnchor="98.0" />
-                <TextField fx:id="stepByField" layoutX="465.0" layoutY="347.0" prefHeight="25.0" prefWidth="50.0" promptText="#" text="1" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="97.0" />
-            <Label fx:id="positionLabel" alignment="BOTTOM_RIGHT" layoutX="771.0" layoutY="119.0" prefHeight="17.0" prefWidth="110.0" text="Cell Position: #" textAlignment="RIGHT" AnchorPane.rightAnchor="10.0" />
+                <Label layoutX="4.0" layoutY="211.0" text="Execution Count:"/>
+                <Label fx:id="countLabel" layoutX="92.0" layoutY="211.0" prefHeight="17.0" prefWidth="50.0" text="#"
+                       AnchorPane.leftAnchor="98.0"/>
+                <TextField fx:id="stepByField" layoutX="465.0" layoutY="347.0" prefHeight="25.0" prefWidth="50.0"
+                           promptText="#" text="1" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="97.0"/>
+                <Label fx:id="positionLabel" alignment="BOTTOM_RIGHT" layoutX="771.0" layoutY="119.0" prefHeight="17.0"
+                       prefWidth="110.0" text="Cell Position: #" textAlignment="RIGHT" AnchorPane.rightAnchor="10.0"/>
             </AnchorPane>
         </AnchorPane>
     </HBox>

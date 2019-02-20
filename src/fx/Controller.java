@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,6 +30,7 @@ public class Controller implements Initializable {
                     + "\n\thttps://github.com/baksha97/TuringMachineEditor"
                     + "\nBe sure to check out any branches for works in progress & please create an issue if a problem is found.";
     private static final String DEFAULT_PROGRAM_NAME = "current-program.txt";
+
     @FXML
     public TextField inputField;
     public TextArea programArea;
@@ -43,6 +43,7 @@ public class Controller implements Initializable {
     public TextArea outputArea;
     public TextField stepByField;
     public Label positionLabel;
+
     private TuringMachine tm;
     private FileChooser fileChooser;
 
@@ -96,9 +97,9 @@ public class Controller implements Initializable {
             Program p = new Program(programArea.getText().trim());
             Tape tape;
 
-            if (inputIsTape()){
+            if (inputIsTape()) {
                 tape = new Tape(inputField.getText().trim());
-            }else {
+            } else {
                 tape = new Tape(Arrays.stream(inputField.getText().trim().split(","))
                         .mapToInt(s -> Integer.parseInt(s.trim())).toArray());
             }
@@ -112,7 +113,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void setupListViewForTuring(){
+    private void setupListViewForTuring() {
         listView.setItems(tm.getObservableList());
         listView.setCellFactory(cell -> new ListCell<Character>() {
             @Override
@@ -181,19 +182,19 @@ public class Controller implements Initializable {
 
     //Keyboard events
     public void keyPressed(KeyEvent e) {
-        if(e.getCode().equals(KeyCode.ENTER) && e.isShiftDown()){
+        if (e.getCode().equals(KeyCode.ENTER) && e.isShiftDown()) {
             onSetClick();
-        }
-        else if (e.getCode().equals(KeyCode.ENTER)) {
+        } else if (e.getCode().equals(KeyCode.ENTER)) {
             onStepClick();
         }
     }
 
+    //Output area printing
     private void println(Object o) {
         outputArea.appendText(o + "\n");
     }
 
-    private void printlnt(Object o){
+    private void printlnt(Object o) {
         println("\t" + o);
     }
 

@@ -16,7 +16,7 @@ public class Quadruple {
             this.command = Command.fromString(partition[2]);
             this.end = partition[3];
             this.startingState = new State(start, conditional);
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Line does not fit format: " + line);
         }
     }

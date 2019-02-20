@@ -53,11 +53,11 @@ public class TuringMachine {
     }
 
 
-    public ObservableList<Character> getObservableList(){
+    public ObservableList<Character> getObservableList() {
         return tape.getCells();
     }
 
-    public int getPos(){
+    public int getPos() {
         return tape.getPos();
     }
 

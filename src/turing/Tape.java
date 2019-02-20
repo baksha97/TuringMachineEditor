@@ -9,23 +9,10 @@ import java.util.List;
 public class Tape {
     private static final char BLANK = 'B';
     private static final char FILL = '1';
-
-    ObservableList<Character> getCells() {
-        return cells;
-    }
-
     private ObservableList<Character> cells;
-
     private int pos;
     private State currentState;
-
-    private Tape() {}
-
-    private void initialize() {
-        cells = FXCollections.observableArrayList();
-        cells.add(BLANK);
-        pos = 0;
-        currentState = new State("1", BLANK);
+    private Tape() {
     }
 
     public Tape(int... inputs) {
@@ -50,6 +37,17 @@ public class Tape {
             cells.add(cur);
         }
         cells.add(BLANK);
+    }
+
+    ObservableList<Character> getCells() {
+        return cells;
+    }
+
+    private void initialize() {
+        cells = FXCollections.observableArrayList();
+        cells.add(BLANK);
+        pos = 0;
+        currentState = new State("1", BLANK);
     }
 
     private List<Character> intInputAsFill(int x) {
@@ -87,7 +85,7 @@ public class Tape {
         pos--;
         if (pos == 0) {
             cells.add(0, BLANK);
-            pos ++;
+            pos++;
         }
     }
 
@@ -122,10 +120,10 @@ public class Tape {
         ArrayList<Integer> res = new ArrayList<>();
         int current = 0;
 
-        for (int i = 0; i < cells.size(); i++) {
-            if (cells.get(i) == FILL) {
+        for (Character cell : cells) {
+            if (cell == FILL) {
                 current++;
-            } else if (i != 0 && cells.get(i) == BLANK && current != 0) {
+            } else if (current != 0 && cell == BLANK) {
                 res.add(current);
                 current = 0;
             }
