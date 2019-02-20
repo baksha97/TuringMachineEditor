@@ -23,7 +23,7 @@ This program allows creation, loading, editing, and stepping through your own Tu
   *Avoid excess white-space and numbers that would cause integer overflow.*
 		- **Acceptable input:**
 			 - [x] ``2``
-			 - [x]  ``2``
+			 - [x]  ``28``
 			 - [x] `7,6`
 			 - [x] `3,4,9,7` 
 
