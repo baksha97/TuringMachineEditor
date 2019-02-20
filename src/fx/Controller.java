@@ -128,7 +128,6 @@ public class Controller implements Initializable {
                 }
             });
 
-
             return true;
         } catch (ArrayIndexOutOfBoundsException ae) {
             println("Invalid input in editor.");
@@ -142,7 +141,7 @@ public class Controller implements Initializable {
     }
 
     private void setupListViewForTuring(){
-        
+
     }
 
     private void updateProgram() {
