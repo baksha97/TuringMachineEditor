@@ -105,9 +105,6 @@ public class Controller implements Initializable {
             this.tm = new TuringMachine(p, tape);
             setupListViewForTuring();
             return true;
-        } catch (ArrayIndexOutOfBoundsException ae) {
-            println("Invalid input in editor.");
-            return false;
         } catch (Exception e) {
             println("Invalid input.");
             println(e.getMessage());
@@ -117,7 +114,6 @@ public class Controller implements Initializable {
 
     private void setupListViewForTuring(){
         listView.setItems(tm.getObservableList());
-//        listView.refresh();
         listView.setCellFactory(cell -> new ListCell<Character>() {
             @Override
             protected void updateItem(Character item, boolean empty) {
@@ -133,7 +129,7 @@ public class Controller implements Initializable {
         });
     }
 
-    //Use new program upon any execution
+    //Use new program upon every execution
     private void updateProgram() {
         tm.changeProgram(new Program(programArea.getText().trim()));
     }
@@ -192,11 +188,6 @@ public class Controller implements Initializable {
             onStepClick();
         }
     }
-
-    //Out - communication
-//    private void println(String s) {
-//        outputArea.appendText(s + "\n");
-//    }
 
     private void println(Object o) {
         outputArea.appendText(o + "\n");
