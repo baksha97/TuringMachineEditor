@@ -1,18 +1,19 @@
 package turing;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tape {
     private static final char BLANK = 'B';
     private static final char FILL = '1';
-
-    private ArrayList<Character> cells;
-
+    private ObservableList<Character> cells;
     private int pos;
     private State currentState;
-
-    private Tape() {}
+    private Tape() {
+    }
 
     public Tape(int... inputs) {
         initialize();
@@ -38,8 +39,12 @@ public class Tape {
         cells.add(BLANK);
     }
 
+    ObservableList<Character> getCells() {
+        return cells;
+    }
+
     private void initialize() {
-        cells = new ArrayList<>();
+        cells = FXCollections.observableArrayList();
         cells.add(BLANK);
         pos = 0;
         currentState = new State("1", BLANK);
@@ -80,7 +85,7 @@ public class Tape {
         pos--;
         if (pos == 0) {
             cells.add(0, BLANK);
-            pos ++;
+            pos++;
         }
     }
 
@@ -97,25 +102,28 @@ public class Tape {
 
     @Override
     public String toString() {
-        return cells.toString();
+        String s = cells.toString()
+                .replace("[", "")
+                .replace("]", "")
+                .replace(",", "")
+                .replace(" ", "");
+
+        return s.substring(0, getPos()) + " || " + s.charAt(getPos()) + " || " + s.substring(getPos() + 1);
     }
 
-    private int getPos() {
+    int getPos() {
         return pos;
     }
 
-    Partition getTapePartition() {
-        return new Partition(getPos(), cells);
-    }
 
     List<Integer> currentNumbersOnTape() {
         ArrayList<Integer> res = new ArrayList<>();
         int current = 0;
 
-        for (int i = 0; i < cells.size(); i++) {
-            if (cells.get(i) == FILL) {
+        for (Character cell : cells) {
+            if (cell == FILL) {
                 current++;
-            } else if (i != 0 && cells.get(i) == BLANK && current != 0) {
+            } else if (current != 0 && cell == BLANK) {
                 res.add(current);
                 current = 0;
             }
@@ -126,46 +134,4 @@ public class Tape {
         return res;
     }
 
-
-    public static class Partition {
-
-        private final String left;
-        private final String position;
-        private final String right;
-
-        Partition(int atPos, ArrayList<Character> cells) {
-            StringBuilder previous = new StringBuilder();
-            String current = "";
-            StringBuilder subsequent = new StringBuilder();
-
-            for (int i = 0; i < cells.size(); i++) {
-                if (i < atPos)
-                    previous.append(cells.get(i)).append(" ");
-                else if (i == atPos)
-                    current = String.valueOf(cells.get(i));
-                else
-                    subsequent.append(cells.get(i)).append(" ");
-
-            }
-            left = previous.toString();
-            position = current;
-            right = subsequent.toString();
-        }
-
-        public String getLeft() {
-            return left;
-        }
-
-        public String getPosition() {
-            return position;
-        }
-
-        public String getRight() {
-            return right;
-        }
-
-        public String toString() {
-            return left + " || " + position + " || " + right;
-        }
-    }
 }
