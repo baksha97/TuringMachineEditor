@@ -50,7 +50,7 @@ public class TuringMachine {
         return tape.currentNumbersOnTape();
     }
 
-    public Tape.TapePartition getTapePartition() {
+    public Tape.Partition getTapePartition() {
         return tape.getTapePartition();
     }
 

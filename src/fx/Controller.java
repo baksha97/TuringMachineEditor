@@ -59,6 +59,10 @@ public class Controller implements Initializable {
 
     public void onRunClick() {
         saveEditor();
+        if(tm == null){
+            println("Setup first.");
+            return;
+        }
         updateProgram();
         while (tm.hasNextQuadruple()) {
             tm.executeNextQuadruple();
@@ -68,6 +72,10 @@ public class Controller implements Initializable {
 
     public void onStepClick() {
         saveEditor();
+        if(tm == null){
+            println("Setup first.");
+            return;
+        }
         updateProgram();
         try {
             int steps = Integer.valueOf(stepByField.getText().trim());
@@ -76,6 +84,7 @@ public class Controller implements Initializable {
             }
         } catch (Exception e) {
             println("Invalid step count input.");
+            println(e.getMessage());
         }
         updateInterface();
     }
@@ -93,9 +102,10 @@ public class Controller implements Initializable {
     }
 
     private boolean setupTuringMachine() {
-        Program p = new Program(programArea.getText().trim());
-        Tape tape;
         try {
+            Program p = new Program(programArea.getText().trim());
+            Tape tape;
+
             if (inputIsTape()) tape = new Tape(inputField.getText().trim());
             else {
                 tape = new Tape(Arrays.stream(inputField.getText().trim().split(","))
@@ -103,8 +113,13 @@ public class Controller implements Initializable {
             }
             tm = new TuringMachine(p, tape);
             return true;
+        } catch (ArrayIndexOutOfBoundsException ae){
+            println("Invalid input in editor.");
+            return false;
         } catch (Exception e) {
             println("Invalid input.");
+            println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -120,11 +135,13 @@ public class Controller implements Initializable {
         setTapeFlow();
         nextQuadLabel.setText(((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available");
         currentNumsLabel.setText(tm.numbersOnTape().toString());
+        countLabel.setText(String.valueOf(tm.getExecutionCount()));
         if (tm.hasNextQuadruple()) {
             stateLabel.setText(tm.getTapeState().toString());
             println("Execution #" + tm.getExecutionCount() + " on:");
+            println(prevQuadString);
             println(tm);
-            println(prevQuadString + "\n");
+            println(tm.numbersOnTape());
         } else {
             nextQuadLabel.setText("None Available");
             stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
@@ -134,7 +151,7 @@ public class Controller implements Initializable {
 
     private void setTapeFlow() {
         tapeFlow.getChildren().clear();
-        Tape.TapePartition parts = tm.getTapePartition();
+        Tape.Partition parts = tm.getTapePartition();
         Text prev = new Text(parts.getLeft());
         Text cur = new Text(parts.getPosition());
         Text sub = new Text(parts.getRight());
@@ -142,7 +159,6 @@ public class Controller implements Initializable {
         cur.setStyle(SELECTED_CELL_STYLE);
         sub.setStyle(UNSELECTED_CELL_STYLE);
         tapeFlow.getChildren().addAll(prev, cur, sub);
-        countLabel.setText(String.valueOf(tm.getExecutionCount()));
     }
 
     //Menu Buttons
@@ -190,7 +206,7 @@ public class Controller implements Initializable {
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException e) {
-            e.printStackTrace();
+            println(e.getMessage());
         }
     }
 
@@ -203,6 +219,7 @@ public class Controller implements Initializable {
             }
         } catch (IOException e) {
             outputArea.setText("No program found.");
+            println(e.getMessage());
         }
     }
 

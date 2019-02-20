@@ -78,17 +78,15 @@ public class Tape {
 
     private void moveLeft() {
         pos--;
-        if (pos < 0) {
+        if (pos == 0) {
             cells.add(0, BLANK);
-            cells.add(0, BLANK);
-            pos += 2;
+            pos ++;
         }
     }
 
     private void moveRight() {
         pos++;
-        if (pos == cells.size()) {
-            cells.add(BLANK);
+        if (pos == cells.size() - 1) {
             cells.add(BLANK);
         }
     }
@@ -106,8 +104,8 @@ public class Tape {
         return pos;
     }
 
-    TapePartition getTapePartition() {
-        return new TapePartition(getPos(), cells);
+    Partition getTapePartition() {
+        return new Partition(getPos(), cells);
     }
 
     List<Integer> currentNumbersOnTape() {
@@ -129,13 +127,13 @@ public class Tape {
     }
 
 
-    public static class TapePartition {
+    public static class Partition {
 
         private final String left;
         private final String position;
         private final String right;
 
-        TapePartition(int atPos, ArrayList<Character> cells) {
+        Partition(int atPos, ArrayList<Character> cells) {
             StringBuilder previous = new StringBuilder();
             String current = "";
             StringBuilder subsequent = new StringBuilder();
