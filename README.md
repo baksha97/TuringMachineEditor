@@ -62,7 +62,8 @@ This program allows creation, loading, editing, and stepping through your own Tu
 
  - [ ] Find a way to prevent the user from deselecting the selected (positioned) cell while still giving them the ability to freely scroll the ListView.
  - [ ] Denote the position of the machine also by bolding the cell. Plan to: -change cell text to "|x|" -if cell.contains("|") *bold*..
-
+ - [ ] Fix execution count overlap on MacOS
+ 
 #### File Open/Save 
 ![Stepping](https://i.gyazo.com/3a7b9edcb0fe8a18fede4753345ad45c.gif)
 
