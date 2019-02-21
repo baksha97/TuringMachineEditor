@@ -38,7 +38,7 @@ public class Program {
         }
     }
 
-    public int size() {
+    private int size() {
         return this.quadruples.size();
     }
 

@@ -49,7 +49,8 @@ This program allows creation, loading, editing, and stepping through your own Tu
 - If you would like to use `ENTER` to execute your program, do so in any of the text fields (not the program editor). You may also hold down the `ENTER` and watch as the ListView moves across each cell.
 - As the tape expands, the list grows horizontally; you may scroll to have a better view of the tape or you may simply widen your program window. Once a cell has been expanded to, it does not ever shrink in space.
 - Instead of counting all the ones, you may look at the numbers in the square brackets. After every step and execution, the numbers are recalculated and shown there. 
-- Be wary of bigger inputs. They work. *Mostly*. 
+- If you lose your position on the tape by selecting another cell, click `F11` on the tape to find your position again.
+- Be wary of bigger inputs. They work. *Mostly*.
 
 ### File Management
 
@@ -61,8 +62,6 @@ This program allows creation, loading, editing, and stepping through your own Tu
 ### TO - DO's
 
  - [ ] Find a way to prevent the user from deselecting the selected (positioned) cell while still giving them the ability to freely scroll the ListView.
- - [ ] Denote the position of the machine also by bolding the cell. Plan to: -change cell text to "|x|" -if cell.contains("|") *bold*..
- - [ ] Fix execution count overlap on MacOS.
  - [ ] Once machine has printed "Machine Halted" to output, prevent it from being printed again (for situations when `ENTER` is being held down).
  - [ ] Instead of scanning through the entire list upon every execution for the numbers on list, only recalculate when an item is printed to the tape.
  

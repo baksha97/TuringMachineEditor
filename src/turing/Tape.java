@@ -12,6 +12,7 @@ public class Tape {
     private ObservableList<Character> cells;
     private int pos;
     private State currentState;
+
     private Tape() {
     }
 
