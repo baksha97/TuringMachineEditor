@@ -62,7 +62,9 @@ This program allows creation, loading, editing, and stepping through your own Tu
 
  - [ ] Find a way to prevent the user from deselecting the selected (positioned) cell while still giving them the ability to freely scroll the ListView.
  - [ ] Denote the position of the machine also by bolding the cell. Plan to: -change cell text to "|x|" -if cell.contains("|") *bold*..
- - [ ] Fix execution count overlap on MacOS
+ - [ ] Fix execution count overlap on MacOS.
+ - [ ] Once machine has printed "Machine Halted" to output, prevent it from being printed again (for situations when `ENTER` is being held down).
+ - [ ] Instead of scanning through the entire list upon every execution for the numbers on list, only recalculate when an item is printed to the tape.
  
 #### File Open/Save 
 ![Stepping](https://i.gyazo.com/3a7b9edcb0fe8a18fede4753345ad45c.gif)
