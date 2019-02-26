@@ -84,7 +84,7 @@ public class Tape {
 
     private void moveLeft() {
         pos--;
-        if (pos == 0) {
+        if (pos <= 0) {
             cells.add(0, BLANK);
             pos++;
         }
