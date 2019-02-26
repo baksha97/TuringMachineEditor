@@ -85,7 +85,7 @@ public class Controller implements Initializable {
             }
         } catch (Exception e) {
             println("Invalid step count input.");
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
         }
         updateInterface();
     }
@@ -113,7 +113,7 @@ public class Controller implements Initializable {
             return true;
         } catch (Exception e) {
             println("Invalid input.");
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
             return false;
         }
     }
@@ -222,7 +222,7 @@ public class Controller implements Initializable {
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException e) {
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
         }
     }
 
@@ -235,7 +235,7 @@ public class Controller implements Initializable {
             }
         } catch (IOException e) {
             println("No program found.");
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
         }
     }
 
