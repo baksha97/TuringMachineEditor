@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -12,6 +11,7 @@ import javafx.stage.Stage;
 import turing.Program;
 import turing.Tape;
 import turing.TuringMachine;
+import turing.TuringMachineViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,9 +43,12 @@ public class Controller implements Initializable {
     public TextArea outputArea;
     public TextField stepByField;
     public Label positionLabel;
+    public TextField tapeSizeField;
 
     private TuringMachine tm;
+    private TuringMachineViewModel tmvm;
     private FileChooser fileChooser;
+    private int tapeSize;
 
     //Execution Buttons
     public void onSetClick() {
@@ -82,7 +85,7 @@ public class Controller implements Initializable {
             }
         } catch (Exception e) {
             println("Invalid step count input.");
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
         }
         updateInterface();
     }
@@ -94,6 +97,7 @@ public class Controller implements Initializable {
 
     private boolean setupTuringMachine() {
         try {
+            tapeSize = Integer.parseInt(tapeSizeField.getText());
             Program p = new Program(programArea.getText().trim());
             Tape tape;
 
@@ -104,11 +108,12 @@ public class Controller implements Initializable {
                         .mapToInt(s -> Integer.parseInt(s.trim())).toArray());
             }
             this.tm = new TuringMachine(p, tape);
+            this.tmvm = new TuringMachineViewModel(tm);
             setupListViewForTuring();
             return true;
         } catch (Exception e) {
             println("Invalid input.");
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
             return false;
         }
     }
@@ -121,7 +126,7 @@ public class Controller implements Initializable {
                 super.updateItem(item, empty);
                 if (item != null) {
                     setText(String.valueOf(item));
-                    setFont(Font.font(18));
+                    setFont(Font.font(tapeSize));
                 } else {
                     setGraphic(null);
                     setText(null);
@@ -137,23 +142,18 @@ public class Controller implements Initializable {
 
     //Configure display
     private void updateInterface() {
-        String prevQuadString = (tm.getPreviousQuadruple() != null) ? tm.getPreviousQuadruple().toString() : "Not executed";
-        String nextQuadString = ((tm.nextQuadruple()) != null) ? tm.nextQuadruple().toString() : "None Available";
-        prevQuadLabel.setText(prevQuadString);
-        nextQuadLabel.setText(nextQuadString);
-        currentNumsLabel.setText(tm.numbersOnTape().toString());
-        countLabel.setText(String.valueOf(tm.getExecutionCount()));
-        positionLabel.setText("Cell position: #" + tm.getPos());
+        prevQuadLabel.setText(tmvm.getPrevQuad());
+        nextQuadLabel.setText(tmvm.getNextQuad());
+        currentNumsLabel.setText(tmvm.getNumbersOnTape());
+        countLabel.setText(tmvm.getExecutionCount());
+        positionLabel.setText(tmvm.getPosition());
+        stateLabel.setText(tmvm.getTapeState());
+
         if (tm.hasNextQuadruple()) {
-            stateLabel.setText(tm.getTapeState().toString());
-            println("Execution #" + tm.getExecutionCount() + " on:");
-            printlnt(prevQuadString);
-            printlnt(tm);
-            printlnt(tm.numbersOnTape());
-        } else {
-            nextQuadLabel.setText("None Available");
-            stateLabel.setText("MACHINE HALTED @" + tm.getTapeState());
-            println("Machine Halted...");
+            println(tmvm.getExecutionCount());
+            printlnt(tmvm.getPrevQuad());
+            printlnt(tmvm);
+            printlnt(tmvm.getNumbersOnTape());
         }
 
         listView.scrollTo(tm.getPos());
@@ -182,10 +182,17 @@ public class Controller implements Initializable {
 
     //Keyboard events
     public void keyPressed(KeyEvent e) {
-        if (e.getCode().equals(KeyCode.ENTER) && e.isShiftDown()) {
-            onSetClick();
-        } else if (e.getCode().equals(KeyCode.ENTER)) {
-            onStepClick();
+        switch (e.getCode()) {
+            case ENTER:
+                if (e.isShiftDown()) onSetClick();
+                else onStepClick();
+                break;
+            case F11:
+                updateProgram();
+                updateInterface();
+                break;
+            default:
+                break;
         }
     }
 
@@ -215,7 +222,7 @@ public class Controller implements Initializable {
         try {
             Files.write(file, lines, Charset.forName("UTF-8"));
         } catch (IOException e) {
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
         }
     }
 
@@ -228,7 +235,7 @@ public class Controller implements Initializable {
             }
         } catch (IOException e) {
             println("No program found.");
-            println(e.getMessage());
+            println(e.getLocalizedMessage());
         }
     }
 

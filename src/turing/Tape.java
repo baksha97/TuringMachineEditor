@@ -12,6 +12,7 @@ public class Tape {
     private ObservableList<Character> cells;
     private int pos;
     private State currentState;
+
     private Tape() {
     }
 
@@ -60,7 +61,10 @@ public class Tape {
 
     void execute(Quadruple q) {
         if (!currentState.equals(q.getStartingState()))
-            throw new IllegalArgumentException("This function cannot be executed because it does not match state.");
+            throw new IllegalArgumentException("This function cannot be executed because it does not match state."
+                                                +"\nState: "  + currentState
+                                                +"\nQuadruple: " + q.getStartingState()
+            );
 
         switch (q.getCommand()) {
             case LEFT:
@@ -83,7 +87,7 @@ public class Tape {
 
     private void moveLeft() {
         pos--;
-        if (pos == 0) {
+        if (pos <= 0) {
             cells.add(0, BLANK);
             pos++;
         }

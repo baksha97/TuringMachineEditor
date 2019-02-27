@@ -30,7 +30,7 @@ public class Program {
             Quadruple q = new Quadruple(l);
 
             if (quadrupleStates.containsKey(q.getStartingState())) {
-                throw new IllegalArgumentException("You seem to have two of the same states in your input.");
+                throw new IllegalArgumentException("You seem to have two of the same states in your input: " + q.getStartingState());
             }
 
             quadruples.add(q);
@@ -38,7 +38,7 @@ public class Program {
         }
     }
 
-    public int size() {
+    private int size() {
         return this.quadruples.size();
     }
 
