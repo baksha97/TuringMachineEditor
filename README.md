@@ -12,12 +12,11 @@ This program allows creation, loading, editing, and stepping through your own Tu
  - In this machine, you may initialize your starting tape 1 of 2 ways.
 	 1. Entering the tape itself: ``B111B111``
 		 - If you enter the tape itself, it must contain a `B`to be entered as a manual tape entry. Otherwise, it will be considered a numeric entry. 
-		 - 
-			 **Acceptable input:**
+		 - **Acceptable input:**
 			 - [x] `B111`
 			 - [x] `111B`
 			 - [x] `BBBBB111`
-			 - [x] `B 1 1  1` 
+			 - [x] `B 1 1  ,   1` 
 			 - [x] `B,1,1,1,B`
 	2. To easily enter an input tape, simply add the number. Multiple inputs require a `,` as a separator. 
   *Avoid excess white-space and numbers that would cause integer overflow.*
