@@ -39,6 +39,7 @@ This program allows creation, loading, editing, and stepping through your own Tu
  - Every time you click "Step" or "Run," the current program in the editor is saved automatically to a text-file `current-program.txt` in your current working directory. This is so that if you accidentally program yourself into an infinite loop and the machine freezes, you have your work saved.
  - The editor automatically loads `current-program.txt` if it is located in the current working directory.
  - You may add new Quadruples into the editor without having to reset your machine, just click Run or Step and it will add your Quadruple to the machine and unhalt it if a state is found for it's current state. **BE WARY OF EDITING YOUR PROGRAM THIS WAY.** You may change your program so-much-so that you the machine will be unable to get back to that position if you've removed or edited a Quadruple that got you to your current state. If you're careful, this can be very helpful in programming something from scratch and adding new lines step by step.
+ - Increase the size of the cells on the tape by changing the default "Cell Size" of 14 to anything higher and Setup again. 
 
 ### Execution
  - Once you've set your program by clicking "Setup/Reset" or using `SHIFT-ENTER`, you may now run your program or step through it.
@@ -61,16 +62,16 @@ This program allows creation, loading, editing, and stepping through your own Tu
 ### TO - DO's
 
  - [ ] Find a way to prevent the user from deselecting the selected (positioned) cell while still giving them the ability to freely scroll the ListView.
- - [ ] Instead of scanning through the entire list upon every execution for the numbers on list, only recalculate when an item is printed to the tape.
+ - [ ] Instead of scanning through the entire list upon every execution for the numbers on list, only recalculate when an item is printed to the tape for time optimization.
  
 #### File Open/Save 
 ![Stepping](https://i.gyazo.com/3a7b9edcb0fe8a18fede4753345ad45c.gif)
 
-#### Step 
-![Stepping](https://i.gyazo.com/dea7f2e620604dbfb75f794192782093.gif)
+#### Setup 
+![Setup](https://i.gyazo.com/280b2cd66a6955ec2182c2b2bd928234.png)
 
-#### Run
-![Running](https://i.gyazo.com/0d4be619f0d233bd4709db7c02559f9b.gif)
+#### Stepping through division
+![Step](https://i.gyazo.com/c1396817164466e1f248eaa0cfb64c74.png)
 
 #### Program: x^2
 ```
