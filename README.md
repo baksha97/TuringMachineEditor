@@ -61,7 +61,6 @@ This program allows creation, loading, editing, and stepping through your own Tu
 ### TO - DO's
 
  - [ ] Find a way to prevent the user from deselecting the selected (positioned) cell while still giving them the ability to freely scroll the ListView.
- - [ ] Once machine has printed "Machine Halted" to output, prevent it from being printed again (for situations when `ENTER` is being held down).
  - [ ] Instead of scanning through the entire list upon every execution for the numbers on list, only recalculate when an item is printed to the tape.
  
 #### File Open/Save 
