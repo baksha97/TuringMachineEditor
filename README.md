@@ -25,6 +25,7 @@ This program allows creation, loading, editing, and stepping through your own Tu
 			 - [x]  ``28``
 			 - [x] `7,6`
 			 - [x] `3,4,9,7` 
+ - Increase the size of the cells on the tape by changing the default "Cell Size" of 14 to anything higher and Setup again. 
 
 ### Program Editor
  - Editor ignores/works around:
@@ -39,7 +40,6 @@ This program allows creation, loading, editing, and stepping through your own Tu
  - Every time you click "Step" or "Run," the current program in the editor is saved automatically to a text-file `current-program.txt` in your current working directory. This is so that if you accidentally program yourself into an infinite loop and the machine freezes, you have your work saved.
  - The editor automatically loads `current-program.txt` if it is located in the current working directory.
  - You may add new Quadruples into the editor without having to reset your machine, just click Run or Step and it will add your Quadruple to the machine and unhalt it if a state is found for it's current state. **BE WARY OF EDITING YOUR PROGRAM THIS WAY.** You may change your program so-much-so that you the machine will be unable to get back to that position if you've removed or edited a Quadruple that got you to your current state. If you're careful, this can be very helpful in programming something from scratch and adding new lines step by step.
- - Increase the size of the cells on the tape by changing the default "Cell Size" of 14 to anything higher and Setup again. 
 
 ### Execution
  - Once you've set your program by clicking "Setup/Reset" or using `SHIFT-ENTER`, you may now run your program or step through it.
