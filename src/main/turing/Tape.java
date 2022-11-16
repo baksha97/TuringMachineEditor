@@ -62,8 +62,8 @@ public class Tape {
     void execute(Quadruple q) {
         if (!currentState.equals(q.getStartingState()))
             throw new IllegalArgumentException("This function cannot be executed because it does not match state."
-                                                +"\nState: "  + currentState
-                                                +"\nQuadruple: " + q.getStartingState()
+                    + "\nState: " + currentState
+                    + "\nQuadruple: " + q.getStartingState()
             );
 
         switch (q.getCommand()) {
