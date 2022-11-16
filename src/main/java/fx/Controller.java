@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-
 public class Controller implements Initializable {
 
     private static final String ABOUT_CONTEXT_MESSAGE =

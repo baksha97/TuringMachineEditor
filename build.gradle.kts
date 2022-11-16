@@ -1,11 +1,28 @@
 plugins {
+    kotlin("jvm") version "1.7.21"
     id("org.openjfx.javafxplugin") version "0.0.13"
 }
 
-java.sourceSets["main"].java {
-    srcDir("src/main")
+sourceSets {
+    main {
+        java {
+            srcDirs("src/main/java")
+            srcDirs("src/main/kotlin")
+        }
+        resources {
+            srcDirs("src/resources")
+        }
+    }
+    test {
+        java {
+            srcDirs("src/test/java")
+            srcDirs("src/test/kotlin")
+        }
+        resources {
+            srcDirs("src/resources")
+        }
+    }
 }
-
 
 buildscript {
     repositories {
@@ -28,13 +45,3 @@ allprojects {
         mavenCentral()
     }
 }
-
-//mainClassName='src.Main'
-//jar {
-//    manifest {
-//        attributes 'Main-Class': 'src.Main'
-//    }
-//    from {
-//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-//    }
-//}

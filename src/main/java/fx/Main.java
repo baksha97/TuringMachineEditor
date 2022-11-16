@@ -15,13 +15,13 @@ import java.util.ResourceBundle;
 public class Main {
 
     public static void main(String[] args) {
-        FXApplicationWrapper1.main(args);
+        Wrapper.main(args);
     }
 
-    public static class FXApplicationWrapper1 extends Application {
-
-        @FXML
-        private ResourceBundle resources;
+    // Required, see:
+    // 1) https://stackoverflow.com/questions/52578072/gradle-openjfx11-error-javafx-runtime-components-are-missing
+    // 2) https://github.com/javafxports/openjdk-jfx/issues/236
+    private static class Wrapper extends Application {
 
         public static void main(String[] args) {
             launch(args);
@@ -33,7 +33,7 @@ public class Main {
             URL icon = Objects.requireNonNull(getClass().getClassLoader().getResource("computer_icon.png"));
 
             System.out.println(editor);
-            Parent root = FXMLLoader.load(editor, resources);
+            Parent root = FXMLLoader.load(editor);
             primaryStage.setTitle("Turing Machine Editor v3.17.2019");
             primaryStage.getIcons().add(new Image(String.valueOf(icon)));
             primaryStage.setScene(new Scene(root));
