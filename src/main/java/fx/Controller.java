@@ -119,7 +119,7 @@ public class Controller implements Initializable {
 
     private void setupListViewForTuring() {
         listView.setItems(tm.getObservableList());
-        listView.setCellFactory(cell -> new ListCell<Character>() {
+        listView.setCellFactory(cell -> new ListCell<>() {
             @Override
             protected void updateItem(Character item, boolean empty) {
                 super.updateItem(item, empty);

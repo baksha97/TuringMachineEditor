@@ -57,7 +57,7 @@ data class Tape internal constructor(private val capacity: Int, val initialNumbe
     internal var currentState: State = State(INITIAL_QUADRUPLE_STATE_NAME, BLANK)
     var reelPosition: Int
 
-    var _reel: MutableList<Int>
+    private var _reel: MutableList<Int>
     val reel: List<Int>
         get() = _reel
 
@@ -150,6 +150,8 @@ data class TuringMachine internal constructor(
 
 //    val id = uuid4().toString()
     var executions = 0
+
+    val quadrupleStates get() = program.quadrupleStates
 
     val reel get() = tape.reel
     val reelPosition get() = tape.reelPosition

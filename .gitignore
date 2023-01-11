@@ -30,3 +30,7 @@ xcuserdata/
 *.xcworkspace
 *.xcuserstate // <--- Her
 TuringMachineApp/Pods/*
+
+gradle/
+gradlew
+gradlew.bat

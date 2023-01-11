@@ -1,6 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "1.7.20"
     id("org.openjfx.javafxplugin") version "0.0.13"
+    id("org.jetbrains.compose") version "1.2.1"
 }
 
 sourceSets {
@@ -29,6 +30,7 @@ buildscript {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
@@ -36,8 +38,18 @@ buildscript {
     }
 }
 
+dependencies {
+    implementation(compose.desktop.currentOs)
+}
+
 javafx {
     modules("javafx.base", "javafx.controls", "javafx.fxml")
+}
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+    }
 }
 
 allprojects {
