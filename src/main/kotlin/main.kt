@@ -1,12 +1,10 @@
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -20,12 +18,8 @@ import kturing.State
 import kturing.TuringMachine
 
 
-val TURING_MACHINE = MachineFactory()
-    .makeTuringMachine(
-        name = "Development",
-        capacity = 100,
-        initialNumbers = listOf(2, 3),
-        programInput = """
+val TURING_MACHINE = MachineFactory().makeTuringMachine(
+    name = "Development", capacity = 100, initialNumbers = listOf(2, 3), programInput = """
             1,B,R,299
             299,1,B,399
             399,B,R,499
@@ -99,7 +93,7 @@ val TURING_MACHINE = MachineFactory()
             25,B,R,25
             25,1,L,26
         """.trimIndent()
-    )
+)
 
 fun main() = application {
     Window(
@@ -120,74 +114,103 @@ fun main() = application {
 
 @Composable
 fun TuringMachineApp(viewModel: MutableState<TuringMachineViewModel>) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // TopAppBar is a pre-defined composable that's placed at the top of the screen. It has
+        // slots for a title, navigation icon, and actions. Also known as the action bar.
+        TopAppBar(
+            // The Text composable is pre-defined by the Compose UI library; you can use this
+            // composable to render text on the screen
+            title = { Text("Turing Machine v2") },
+        )
         ExecutionView(viewModel)
         QuadrupleStateView(viewModel.value.quadrupleStates.toList())
     }
 }
 
+@Preview
 @Composable
-fun QuadrupleStateView(quadrupleStates: List<Pair<State, Quadruple>>) =
-    LazyColumn(state = rememberLazyListState()) {
-        items(quadrupleStates, key = { it.first }) {
-            QuadrupleStateRow(it)
-        }
-    }
+fun TuringMachineAppPreview() {
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+    val viewModel = remember { mutableStateOf(TuringMachineViewModel(TURING_MACHINE, listState, coroutineScope)) }
+
+    TuringMachineApp(viewModel)
+}
 
 @Composable
-fun QuadrupleStateRow(quadrupleState: Pair<State, Quadruple>) =
-    Row {
-        Text(
-            modifier = Modifier
-//                .padding(4.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = Color.Black,
-                        radius = size.maxDimension
-                    )
-                },
-            text = "${quadrupleState.first}",
-            color = Color.White
-        )
+fun QuadrupleStateView(quadrupleStates: List<Pair<State, Quadruple>>) = LazyColumn(
+    state = rememberLazyListState()
+) {
+    items(quadrupleStates, key = { it.first }) {
+        QuadrupleStateRow(it)
     }
+}
+
+
+@Composable
+fun QuadrupleStateRow(quadrupleState: Pair<State, Quadruple>) = Row {
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        backgroundColor = MaterialTheme.colors.surface
+    ) {
+        // Row is a composable that places its children in a horizontal sequence. You
+        // can think of it similar to a LinearLayout with the horizontal orientation.
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(
+                10.dp, Alignment.CenterHorizontally
+            ),
+        ) {
+            // A pre-defined composable that's capable of rendering a switch. It honors the Material
+            // Design specification.
+            Text(
+                text = "${quadrupleState.first}",
+                color = Color.Black,
+            )
+            Text(
+                text = "${quadrupleState.second.command}",
+                color = Color.Black
+            )
+            Text(
+                text = quadrupleState.second.end,
+                color = Color.Black,
+            )
+        }
+    }
+}
 
 @Composable
 fun ExecutionView(viewModel: MutableState<TuringMachineViewModel>) =
     Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
         ItemRow(viewModel)
         Text("Reel position ${viewModel.value.reelPosition.value}")
-        Button(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = {
-                println("Reel position ${viewModel.value.reelPosition}")
-                viewModel.value.executeNextQuadruple()
-            }
-        ) {
+        Button(modifier = Modifier.align(Alignment.CenterHorizontally), onClick = {
+            println("Reel position ${viewModel.value.reelPosition}")
+            viewModel.value.executeNextQuadruple()
+        }) {
             Text("TM Value")
         }
     }
 
 
 @Composable
-fun ItemRow(viewModel: MutableState<TuringMachineViewModel>) =
-    LazyRow(state = viewModel.value.reelListState) {
-        itemsIndexed(viewModel.value.reel) { index, item ->
-            Box(modifier = Modifier.padding(4.dp)) {
-                if (viewModel.value.reelPosition.value == index)
-                    Text(
-                        "[[[$index]]]",
-                        Modifier.align(Alignment.Center),
-                        color = Color.Red
-                    )
-                else
-                    Text(
-                        "$index",
-                        Modifier.align(Alignment.Center),
-                        color = Color.Blue
-                    )
-            }
+fun ItemRow(viewModel: MutableState<TuringMachineViewModel>) = LazyRow(state = viewModel.value.reelListState) {
+    itemsIndexed(viewModel.value.reel) { index, item ->
+        Box(modifier = Modifier.padding(4.dp)) {
+            if (viewModel.value.reelPosition.value == index) Text(
+                "[[[$index]]]", Modifier.align(Alignment.Center), color = Color.Red
+            )
+            else Text(
+                "$index", Modifier.align(Alignment.Center), color = Color.Blue
+            )
         }
     }
+}
 
 class TuringMachineViewModel(
     private val turingMachine: TuringMachine,
