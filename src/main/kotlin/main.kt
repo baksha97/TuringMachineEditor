@@ -1,10 +1,12 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -17,9 +19,15 @@ import kturing.Quadruple
 import kturing.State
 import kturing.TuringMachine
 
+// ui inspo:
+// https://www.youtube.com/watch?v=XtM-sRLxLLc
 
-val TURING_MACHINE = MachineFactory().makeTuringMachine(
-    name = "Development", capacity = 100, initialNumbers = listOf(2, 3), programInput = """
+val TURING_MACHINE = MachineFactory()
+    .makeTuringMachine(
+        name = "Development",
+        capacity = 100,
+        initialNumbers = listOf(2, 3),
+        programInput = """
             1,B,R,299
             299,1,B,399
             399,B,R,499
@@ -93,7 +101,7 @@ val TURING_MACHINE = MachineFactory().makeTuringMachine(
             25,B,R,25
             25,1,L,26
         """.trimIndent()
-)
+    )
 
 fun main() = application {
     Window(
@@ -102,18 +110,27 @@ fun main() = application {
         state = rememberWindowState(width = 900.dp, height = 900.dp)
     ) {
 
-        val listState = rememberLazyListState()
-        val coroutineScope = rememberCoroutineScope()
-        val viewModel = remember { mutableStateOf(TuringMachineViewModel(TURING_MACHINE, listState, coroutineScope)) }
+        val reelListState = rememberLazyListState()
+        val reelCoroutineScope = rememberCoroutineScope()
+        val quadrupleListState = rememberLazyListState()
+        val quadrupleCoroutineScope = rememberCoroutineScope()
+        val viewModel = TuringMachineViewModel(
+            TURING_MACHINE,
+            reelListState,
+            reelCoroutineScope,
+            quadrupleListState,
+            quadrupleCoroutineScope
+        )
+        val viewModelState = remember { mutableStateOf(viewModel) }
 
         MaterialTheme {
-            TuringMachineApp(viewModel = viewModel)
+            TuringMachineApp(viewModelState = viewModelState)
         }
     }
 }
 
 @Composable
-fun TuringMachineApp(viewModel: MutableState<TuringMachineViewModel>) {
+fun TuringMachineApp(viewModelState: MutableState<TuringMachineViewModel>) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
@@ -122,92 +139,201 @@ fun TuringMachineApp(viewModel: MutableState<TuringMachineViewModel>) {
         // TopAppBar is a pre-defined composable that's placed at the top of the screen. It has
         // slots for a title, navigation icon, and actions. Also known as the action bar.
         TopAppBar(
-            // The Text composable is pre-defined by the Compose UI library; you can use this
+            // The Text composable is pre-defined by to Compose UI library; you can use this
             // composable to render text on the screen
-            title = { Text("Turing Machine v2") },
+            title = { Text("Turing Machine Editor") },
         )
-        ExecutionView(viewModel)
-        QuadrupleStateView(viewModel.value.quadrupleStates.toList())
+
+        ReelView(viewModelState)
+        Row {
+            QuadrupleStateView(viewModelState)
+            Button(
+//                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = viewModelState.value::executeNextQuadruple
+            ) {
+                Text("Next")
+            }
+        }
+        Text("heelo world")
+
+
     }
 }
 
 @Preview
 @Composable
 fun TuringMachineAppPreview() {
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-    val viewModel = remember { mutableStateOf(TuringMachineViewModel(TURING_MACHINE, listState, coroutineScope)) }
+    val reelListState = rememberLazyListState()
+    val reelCoroutineScope = rememberCoroutineScope()
+    val quadrupleListState = rememberLazyListState()
+    val quadrupleCoroutineScope = rememberCoroutineScope()
+    val viewModel = TuringMachineViewModel(
+        TURING_MACHINE,
+        reelListState,
+        reelCoroutineScope,
+        quadrupleListState,
+        quadrupleCoroutineScope
+    )
+    val viewModelState = remember { mutableStateOf(viewModel) }
 
-    TuringMachineApp(viewModel)
+    TuringMachineApp(viewModelState)
 }
 
 @Composable
-fun QuadrupleStateView(quadrupleStates: List<Pair<State, Quadruple>>) = LazyColumn(
-    state = rememberLazyListState()
-) {
-    items(quadrupleStates, key = { it.first }) {
-        QuadrupleStateRow(it)
+fun QuadrupleStateView(viewModelState: MutableState<TuringMachineViewModel>) {
+    val quadrupleStates = viewModelState.value.quadrupleStates.toList()
+    LazyColumn(
+        state = viewModelState.value.quadrupleListState,
+        contentPadding = PaddingValues(8.dp),
+        modifier = Modifier
+            .draggable(
+                orientation = Orientation.Vertical,
+                state = rememberDraggableState { delta ->
+                    viewModelState.value.quadrupleCoroutineScope.launch {
+                        viewModelState.value.quadrupleListState.scrollBy(-delta)
+                    }
+                },
+            )
+            .fillMaxWidth(0.5f)
+    ) {
+        items(quadrupleStates, key = { it.first }) {
+            val isSelected = viewModelState.value.currentStateName.value == it.first.name
+                    && viewModelState.value.currentStateValue.value == it.first.value
+            QuadrupleStateRow(it, isSelected = isSelected)
+        }
     }
 }
 
-
 @Composable
-fun QuadrupleStateRow(quadrupleState: Pair<State, Quadruple>) = Row {
-
+fun QuadrupleStateRow(quadrupleState: Pair<State, Quadruple>, isSelected: Boolean = false) =
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        backgroundColor = MaterialTheme.colors.surface
+        backgroundColor = if (isSelected) Color.Black else Color.Transparent
     ) {
+        val circleRadius = 60f
         // Row is a composable that places its children in a horizontal sequence. You
         // can think of it similar to a LinearLayout with the horizontal orientation.
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(
-                10.dp, Alignment.CenterHorizontally
+                24.dp, Alignment.CenterHorizontally
             ),
         ) {
             // A pre-defined composable that's capable of rendering a switch. It honors the Material
             // Design specification.
             Text(
-                text = "${quadrupleState.first}",
-                color = Color.Black,
+                quadrupleState.first.name,
+                color = Color.White,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .drawBehind {
+                        drawCircle(
+                            color = Color.DarkGray,
+                            radius = circleRadius
+                        )
+                    },
             )
             Text(
+                "${quadrupleState.first.value}",
+                color = Color.White,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .drawBehind {
+                        drawCircle(
+                            color = Color.Gray,
+                            radius = circleRadius
+                        )
+                    },
+            )
+
+            Text(
                 text = "${quadrupleState.second.command}",
-                color = Color.Black
+                color = Color.White,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .drawBehind {
+                        drawCircle(
+                            color = Color.DarkGray,
+                            radius = circleRadius
+                        )
+                    },
             )
             Text(
                 text = quadrupleState.second.end,
-                color = Color.Black,
+                color = Color.White,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .drawBehind {
+                        drawCircle(
+                            color = Color.DarkGray,
+                            radius = circleRadius
+                        )
+                    },
             )
+        }
+    }
+
+@Composable
+fun ReelView(viewModel: MutableState<TuringMachineViewModel>) = ReelItems(viewModel)
+
+
+
+@Composable
+fun ReelItems(viewModelState: MutableState<TuringMachineViewModel>) {
+    LazyRow(
+        state = viewModelState.value.reelListState,
+        modifier = Modifier
+            .draggable(
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
+                    viewModelState.value.reelCoroutineScope.launch {
+                        viewModelState.value.reelListState.scrollBy(-delta)
+                    }
+                },
+            )
+    ) {
+        val circleRadius = 48f
+        itemsIndexed(viewModelState.value.reel) { index, item ->
+            Box(
+                modifier = Modifier.padding(4.dp),
+            ) {
+                if (viewModelState.value.reelPosition.value == index) Text(
+                    "$item",
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .drawBehind {
+                            drawCircle(
+                                color = Color.Red,
+                                radius = circleRadius
+                            )
+                        },
+                )
+                else Text(
+                    text = "$item",
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .drawBehind {
+                            drawCircle(
+                                color = Color.Black,
+                                radius = circleRadius
+                            )
+                        },
+                )
+            }
         }
     }
 }
 
-@Composable
-fun ExecutionView(viewModel: MutableState<TuringMachineViewModel>) =
-    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        ItemRow(viewModel)
-        Text("Reel position ${viewModel.value.reelPosition.value}")
-        Button(modifier = Modifier.align(Alignment.CenterHorizontally), onClick = {
-            println("Reel position ${viewModel.value.reelPosition}")
-            viewModel.value.executeNextQuadruple()
-        }) {
-            Text("TM Value")
-        }
-    }
-
-
-@Composable
-fun ItemRow(viewModel: MutableState<TuringMachineViewModel>) = LazyRow(state = viewModel.value.reelListState) {
-    itemsIndexed(viewModel.value.reel) { index, item ->
-        Box(modifier = Modifier.padding(4.dp)) {
-            if (viewModel.value.reelPosition.value == index) Text(
-                "[[[$index]]]", Modifier.align(Alignment.Center), color = Color.Red
-            )
-            else Text(
-                "$index", Modifier.align(Alignment.Center), color = Color.Blue
-            )
+fun LazyListState.animateScrollAndCentralizeItem(index: Int, scope: CoroutineScope) {
+    val itemInfo = this.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
+    scope.launch {
+        if (itemInfo != null) {
+            val center = this@animateScrollAndCentralizeItem.layoutInfo.viewportEndOffset / 2
+            val childCenter = itemInfo.offset + itemInfo.size / 2
+            this@animateScrollAndCentralizeItem.animateScrollBy((childCenter - center).toFloat())
+        } else {
+            this@animateScrollAndCentralizeItem.animateScrollToItem(index)
         }
     }
 }
@@ -215,7 +341,9 @@ fun ItemRow(viewModel: MutableState<TuringMachineViewModel>) = LazyRow(state = v
 class TuringMachineViewModel(
     private val turingMachine: TuringMachine,
     val reelListState: LazyListState,
-    private val reelCoroutineScope: CoroutineScope
+    val reelCoroutineScope: CoroutineScope,
+    val quadrupleListState: LazyListState,
+    val quadrupleCoroutineScope: CoroutineScope
 ) {
     var reel = turingMachine.reel.toMutableStateList()
 
@@ -226,6 +354,19 @@ class TuringMachineViewModel(
     var nextQuadruple = mutableStateOf(turingMachine.nextQuadruple())
     var quadrupleStates = turingMachine.quadrupleStates // doesn't change
 
+    private val quadrupleStateToIndex: Map<State, Int>
+
+    init {
+        val quadrupleStateToIndex = mutableMapOf<State, Int>()
+        quadrupleStates
+            .toList()
+            .forEachIndexed { index, item ->
+                quadrupleStateToIndex[item.first] = index
+            }
+        this.quadrupleStateToIndex = quadrupleStateToIndex
+        updateScrollStates()
+    }
+
     private fun updateState() {
         reel = turingMachine.reel.toMutableStateList()
         executionCount.value = turingMachine.executions
@@ -233,17 +374,28 @@ class TuringMachineViewModel(
         currentStateName.value = turingMachine.currentStateName
         currentStateValue.value = turingMachine.currentStateValue
         nextQuadruple.value = turingMachine.nextQuadruple()
+        updateScrollStates()
+    }
+
+    private fun updateScrollStates() {
         reelCoroutineScope.launch {
-            reelListState.scrollToItem(index = reelPosition.value)
+            reelListState.animateScrollAndCentralizeItem(index = reelPosition.value, this)
+        }
+        quadrupleCoroutineScope.launch {
+            quadrupleStateToIndex[State(currentStateName.value, currentStateValue.value)]
+                ?.let {
+                    quadrupleListState.animateScrollAndCentralizeItem(index = it, this)
+                }
         }
     }
 
-    fun executeNextQuadruple() {
+
+    fun executeNextQuadruple() =
         try {
             turingMachine.executeSubsequentQuadruple()
             updateState()
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
+
 }
